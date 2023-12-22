@@ -116,7 +116,7 @@ namespace ServiceLayer.CommonHelpers
             CommonResponse response = new CommonResponse();
             try
             {
-                var tokenDetail = _commonRepo.TokenMstList().FirstOrDefault(x => x.Token == tokenReqDTO.Token && x.RefreshToken == tokenReqDTO.RefreshToken);
+                var tokenDetail = _commonRepo.TokenMstList().FirstOrDefault(x => x.Token == tokenReqDTO.Token.Trim() && x.RefreshToken == tokenReqDTO.RefreshToken.Trim());
 
                 var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.EmployeeId == tokenDetail.EmployeeId);
                 TokenResDTO tokenResDTO = new TokenResDTO();
@@ -125,8 +125,8 @@ namespace ServiceLayer.CommonHelpers
                 {
                     if (tokenDetail != null)
                     {
-                        string Token = tokenReqDTO.Token;
-                        string refreshToken = tokenReqDTO.RefreshToken;
+                        string Token = tokenReqDTO.Token.Trim();
+                        string refreshToken = tokenReqDTO.RefreshToken.Trim();
                         var tokenHandler = new JwtSecurityTokenHandler();
                         SecurityToken securityToken;
                         var principal = tokenHandler.ValidateToken(Token, new TokenValidationParameters

@@ -16,6 +16,12 @@ namespace WebApi
             service.AddScoped<IAuth, AuthImpl>();
             service.AddScoped<AuthBLL>();
 
+            service.AddScoped<IDropDownMst, DropDownMstImpl>();
+            service.AddScoped<DropDownMstBLL>();
+
+            service.AddScoped<IUser, UserImpl>();
+            service.AddScoped<UserBLL>();
+
         }
     }
 }

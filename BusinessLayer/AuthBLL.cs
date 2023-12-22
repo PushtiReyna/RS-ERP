@@ -48,10 +48,10 @@ namespace BusinessLayer
             try
             {
                 ChangePasswordResDTO changePasswordResDTO = new ChangePasswordResDTO();
-                var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.EmployeeId == changePasswordReqDTO.EmployeeId && x.IsDelete == false);
+                var userDetail = await  _commonRepo.UserMstList().FirstOrDefaultAsync(x => x.EmployeeId == changePasswordReqDTO.EmployeeId);
                 if (userDetail != null)
                 {
-                    if (userDetail.Password == changePasswordReqDTO.NewPassword)
+                    if (userDetail.Password.Trim() == changePasswordReqDTO.NewPassword.Trim())
                     {
                         response.Message = " password is already exists";
                         response.StatusCode = System.Net.HttpStatusCode.BadRequest;
@@ -59,16 +59,13 @@ namespace BusinessLayer
                     }
                     else
                     {
-                        userDetail.Password = changePasswordReqDTO.NewPassword;
+                        userDetail.Password = changePasswordReqDTO.NewPassword.Trim();
                         userDetail.UpdatedDate = DateTime.Now;
                         userDetail.UpdatedBy = 1;
                         _dbContext.Entry(userDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();
 
                         changePasswordResDTO.EmployeeId = userDetail.EmployeeId;
-
-
-
                         response.Data = changePasswordResDTO;
                         response.Message = "changepassword successfully";
                         response.Status = true;
@@ -90,10 +87,10 @@ namespace BusinessLayer
             try
             {
                 ResetPasswordResDTO resetPasswordResDTO = new ResetPasswordResDTO();
-                var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.EmployeeId == resetPasswordReqDTO.EmployeeId && x.IsDelete == false);
+                var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.EmployeeId == resetPasswordReqDTO.EmployeeId);
                 if (userDetail != null)
                 {
-                    userDetail.Password = resetPasswordReqDTO.NewPassword;
+                    userDetail.Password = resetPasswordReqDTO.NewPassword.Trim();
                     userDetail.UpdatedDate = DateTime.Now;
                     userDetail.UpdatedBy = 1;
                     _dbContext.Entry(userDetail).State = EntityState.Modified;
@@ -119,7 +116,7 @@ namespace BusinessLayer
             CommonResponse response = new CommonResponse();
             try
             {
-                var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.Email == forgotPasswordReqDTO.Email && x.IsDelete == false);
+                var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.Email == forgotPasswordReqDTO.Email);
                 if(userDetail != null)
                 {
                     await _commonHelper.SendLinkEmail(forgotPasswordReqDTO.Email, userDetail.EmployeeId);

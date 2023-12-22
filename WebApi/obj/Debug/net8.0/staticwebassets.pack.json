@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\11.jpg",
+      "PackagePath": "staticwebassets\\Images\\11.jpg"
+    },
+    {
+      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\book1.jfif",
+      "PackagePath": "staticwebassets\\Images\\book1.jfif"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WebApi.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.WebApi.props",
+      "PackagePath": "build\\WebApi.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.WebApi.props",
+      "PackagePath": "buildMultiTargeting\\WebApi.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.WebApi.props",
+      "PackagePath": "buildTransitive\\WebApi.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

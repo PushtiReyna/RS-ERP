@@ -23,7 +23,7 @@ namespace ServiceLayer.CommonHelpers
         {
             return _dbContext.DepartmentMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
         }
-        public IQueryable<DesignationMst> DesignationMstList(bool isActive = true, bool isDelete = false)
+        public IQueryable<DesignationMst>DesignationMstList(bool isActive = true, bool isDelete = false)
         {
             return _dbContext.DesignationMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
         }
