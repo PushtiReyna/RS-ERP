@@ -27,6 +27,26 @@ namespace ServiceLayer.CommonHelpers
         {
             return _dbContext.DesignationMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
         }
+        public IQueryable<EmployeeTypeMst> EmployeeTypeMstList(bool isActive = true, bool isDelete = false)
+        {
+            return _dbContext.EmployeeTypeMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
+        }
+        public IQueryable<RoleMst> RoleMstList(bool isActive = true, bool isDelete = false)
+        {
+            return _dbContext.RoleMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
+        }
+        public IQueryable<ReportingManagerMst> ReportingManagerMstsList(bool isActive = true, bool isDelete = false)
+        {
+            return _dbContext.ReportingManagerMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
+        }
+        public IQueryable<AttritionTypeMst> AttritionTypeMstsList(bool isActive = true, bool isDelete = false)
+        {
+            return _dbContext.AttritionTypeMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
+        }
+        public IQueryable<ResignMst> ResignMstsList()
+        {
+            return _dbContext.ResignMsts.AsQueryable();
+        }
         public IQueryable<TokenMst> TokenMstList()
         {
             return _dbContext.TokenMsts.AsQueryable();

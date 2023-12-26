@@ -21,7 +21,8 @@ namespace ServiceLayer
         public async Task<CommonResponse> AddEmployeeType(EmployeeTypeReqDTO employeeTypeReqDTO) => await _dropDownMstBLL.AddEmployeeType(employeeTypeReqDTO);
         public async Task<CommonResponse> AddDepartment(DepartmentReqDTO departmentReqDTO) => await _dropDownMstBLL.AddDepartment(departmentReqDTO);
         public async Task<CommonResponse> AddDesignation(DesignationReqDTO designationReqDTO) => await _dropDownMstBLL.AddDesignation(designationReqDTO);
-        public async Task<CommonResponse> AddRoleType(RoleReqDTO roleReqDTO) => await _dropDownMstBLL.AddRoleType(roleReqDTO);
+        public async Task<CommonResponse> AddRoleType(RoleReqDTO roleReqDTO) => await _dropDownMstBLL.AddRoleType(roleReqDTO);    
+        public async Task<CommonResponse> AddReportingManager(ReportingManagerReqDTO reportingManagerReqDTO) => await _dropDownMstBLL.AddReportingManager(reportingManagerReqDTO);
     }
 
     public interface IDropDownMst
@@ -30,5 +31,6 @@ namespace ServiceLayer
         public Task<CommonResponse> AddDepartment(DepartmentReqDTO departmentReqDTO);
         public Task<CommonResponse> AddDesignation(DesignationReqDTO designationReqDTO);
         public Task<CommonResponse> AddRoleType(RoleReqDTO roleReqDTO);
+        public Task<CommonResponse> AddReportingManager(ReportingManagerReqDTO reportingManagerReqDTO);
     }
 }

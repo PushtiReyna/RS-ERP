@@ -39,7 +39,7 @@ namespace ServiceLayer.CommonHelpers
                 LoginResDTO loginResDTO = new LoginResDTO();
                 TokenMst tokenMst = new TokenMst();
 
-                var userDetail = _dbContext.UserMsts.FirstOrDefault(x => x.Email == loginReqDTO.Email.Trim() && loginReqDTO.Password != null && x.Password == loginReqDTO.Password.Trim() && x.IsDelete == false);
+                var userDetail = await _commonRepo.UserMstList().FirstOrDefaultAsync(x => x.Email == loginReqDTO.Email.Trim() && loginReqDTO.Password != null && x.Password == loginReqDTO.Password.Trim());
                 if (userDetail != null)
                 {
                     var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JsonWebTokenKeys:IssuerSigningKey"]));
@@ -74,7 +74,7 @@ namespace ServiceLayer.CommonHelpers
                         tokenDetail.Token = tokenString;
                         tokenDetail.TokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:TokenExpiryMin"]));
                         tokenDetail.RefreshToken = refreshtokenstring;
-                        tokenDetail.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryDays"]));
+                        tokenDetail.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryMin"]));
                         tokenDetail.UpdatedDate = DateTime.Now;
                         _dbContext.Entry(tokenDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();
@@ -84,7 +84,7 @@ namespace ServiceLayer.CommonHelpers
                         tokenMst.Token = tokenString;
                         tokenMst.TokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:TokenExpiryMin"]));
                         tokenMst.RefreshToken = refreshtokenstring;
-                        tokenMst.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryDays"]));
+                        tokenMst.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryMin"]));
                         tokenMst.CreatedDate = DateTime.Now;
                         tokenMst.EmployeeId = userDetail.EmployeeId;
                         _dbContext.TokenMsts.Add(tokenMst);
@@ -117,13 +117,12 @@ namespace ServiceLayer.CommonHelpers
             try
             {
                 var tokenDetail = _commonRepo.TokenMstList().FirstOrDefault(x => x.Token == tokenReqDTO.Token.Trim() && x.RefreshToken == tokenReqDTO.RefreshToken.Trim());
-
-                var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.EmployeeId == tokenDetail.EmployeeId);
                 TokenResDTO tokenResDTO = new TokenResDTO();
 
-                if (userDetail != null)
+                if (tokenDetail != null)
                 {
-                    if (tokenDetail != null)
+                    var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.EmployeeId == tokenDetail.EmployeeId);
+                    if (userDetail != null)
                     {
                         string Token = tokenReqDTO.Token.Trim();
                         string refreshToken = tokenReqDTO.RefreshToken.Trim();
@@ -154,7 +153,7 @@ namespace ServiceLayer.CommonHelpers
                             //if token is not expired
                             else if (tokenDetail.Token != Token || tokenDetail.TokenExpiryTime >= DateTime.Now)
                             {
-                                response.Message = " token is not expired";
+                                response.Message = "token is not expired";
                                 response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                                 return response;
                             }
@@ -187,7 +186,7 @@ namespace ServiceLayer.CommonHelpers
                                 tokenDetail.Token = tokenString;
                                 tokenDetail.TokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:TokenExpiryMin"]));
                                 tokenDetail.RefreshToken = refreshtokenstring;
-                                tokenDetail.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryDays"]));
+                                tokenDetail.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryMin"]));
                                 tokenDetail.UpdatedDate = DateTime.Now;
                                 _dbContext.Entry(tokenDetail).State = EntityState.Modified;
                                 _dbContext.SaveChanges();
@@ -204,13 +203,13 @@ namespace ServiceLayer.CommonHelpers
                     }
                     else
                     {
-                        response.Message = "token is not correct";
+                        response.Message = "user is not corrct";
                         response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                     }
                 }
                 else
                 {
-                    response.Message = "user is not corrct";
+                    response.Message = "token is not correct";
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 }
             }

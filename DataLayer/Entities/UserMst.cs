@@ -9,7 +9,7 @@ public partial class UserMst
 
     public int EmployeeId { get; set; }
 
-    public string Image { get; set; } = null!;
+    public string? Image { get; set; }
 
     public string FirstName { get; set; } = null!;
 
@@ -59,7 +59,7 @@ public partial class UserMst
 
     public int? RoleId { get; set; }
 
-    public string? ReportingManager { get; set; }
+    public int? ReportingManagerId { get; set; }
 
     public string? BankName { get; set; }
 
@@ -102,4 +102,10 @@ public partial class UserMst
     public int? UpdatedBy { get; set; }
 
     public DateTime? UpdatedDate { get; set; }
+
+    public string? ContactNumber { get; set; }
+
+    public bool? EmployeeStatus { get; set; }
+
+    public DateTime? JoiningDate { get; set; }
 }

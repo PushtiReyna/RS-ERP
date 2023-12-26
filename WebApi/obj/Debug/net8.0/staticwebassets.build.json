@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "XMva4v/2shqYA3e7qf9xsSDh5mNRpAHFPydTLmgarEU=",
+  "Hash": "NofmpDUgxMOVovJy7JUEwIiZZUygIEwA8e+KeRSuxzw=",
   "Source": "WebApi",
   "BasePath": "_content/WebApi",
   "Mode": "Default",
@@ -16,25 +16,6 @@
     }
   ],
   "Assets": [
-    {
-      "Identity": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\11.jpg",
-      "SourceId": "WebApi",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\",
-      "BasePath": "_content/WebApi",
-      "RelativePath": "Images/11.jpg",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Images\\11.jpg"
-    },
     {
       "Identity": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\book1.jfif",
       "SourceId": "WebApi",
@@ -53,6 +34,44 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Images\\book1.jfif"
+    },
+    {
+      "Identity": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\book2.jfif",
+      "SourceId": "WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\",
+      "BasePath": "_content/WebApi",
+      "RelativePath": "Images/book2.jfif",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\book2.jfif"
+    },
+    {
+      "Identity": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\demo.jpg",
+      "SourceId": "WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\",
+      "BasePath": "_content/WebApi",
+      "RelativePath": "Images/demo.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\demo.jpg"
     }
   ]
 }

@@ -98,7 +98,7 @@ BEGIN
 	Create table dbo.UserMst(
 			ID int IDENTITY(1,1) Primary Key NOT NULL,
 			EmployeeID int NOT NULL,
-			Image nvarchar(MAX) NOT NULL,
+			Image nvarchar(MAX) NULL,
 			FirstName nvarchar(50) NOT NULL,
 			MiddleName nvarchar(50) NOT NULL,
 			LastName nvarchar(50) NOT NULL,
@@ -123,7 +123,7 @@ BEGIN
 			ProbationPeriod int NULL,
 			NoticePeriod int NULL,
 			RoleId int NULL,
-			ReportingManager nvarchar(50) NULL,
+			ReportingManagerId int NULL,
 			BankName  nvarchar(50)  NULL,
 			NameOnTheAccount nvarchar(50)  NULL,
 			AccountNo nvarchar(50) NULL,
@@ -207,3 +207,103 @@ INSERT INTO [dbo].[UserMst]
 
 --added on 22-12-2023 by PP-------------------------------------------END-----------------------------------------------
 --executed on local by PP on 22-12-2023---------------------------------------------------------------------------------
+
+
+--added on 26-12-2023 by PP-------------------------------------------START---------------------------------------------
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
+			TABLE_NAME = 'ReportingManagerMst')
+BEGIN 
+	Create table dbo.ReportingManagerMst(
+			ReportingManagerId int identity(1,1) primary key NOT NULL,
+			ReportingManagerName nvarchar(100) NOT NULL,
+			IsActive bit NOT NULL,
+			IsDelete bit  null,
+			CreatedBy int NOT NULL,
+			CreatedDate datetime NOT NULL,
+			UpdatedBy int  null,
+			UpdatedDate datetime  null,
+			);
+	PRINT 'ReportingManagerMst Table Created' 
+END
+ELSE
+BEGIN 
+	PRINT 'ReportingManagerMst Table Already Exist' 
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
+			TABLE_NAME = 'ResignMst')
+BEGIN 
+	Create table dbo.ResignMst(
+			ResignId int identity(1,1) primary key NOT NULL,
+			EmployeeId int NOT NULL,
+			DateOfResignation datetime NOT NULL,
+			AttritionId int not null,
+			Reason nvarchar(100) null,
+			Region nvarchar(50) null,
+			FinalDate  datetime  NULL,
+			FinalStatus nvarchar(50) null,
+			CreatedBy int NOT NULL,
+			CreatedDate  datetime NOT NULL
+			);
+	PRINT 'ResignMst Table Created' 
+END
+ELSE
+BEGIN 
+	PRINT 'ResignMst Table Already Exist' 
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
+			TABLE_NAME = 'AttritionTypeMst')
+BEGIN 
+	Create table dbo.AttritionTypeMst(
+			AttritionTypeId int identity(1,1) primary key NOT NULL,
+			AttritionTypeName nvarchar(30) NOT NULL,
+			IsActive bit NOT NULL,
+			IsDelete bit  NULL,
+			CreatedBy int NOT NULL,
+			CreatedDate datetime NOT NULL,
+			UpdatedBy int  NULL,
+			UpdatedDate datetime NULL
+			);
+	PRINT 'AttritionTypeMst Table Created' 
+END
+ELSE
+BEGIN 
+	PRINT 'AttritionTypeMst Table Already Exist' 
+END
+
+
+
+
+IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.UserMst') AND name = 'ContactNumber')
+BEGIN
+	ALTER TABLE UserMst add ContactNumber nvarchar(50) NULL;
+END
+ELSE
+BEGIN
+	PRINT 'ContactNumber Column Already Exist' 
+END
+
+IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.UserMst') AND name = 'EmployeeStatus')
+BEGIN
+	  ALTER TABLE UserMst add EmployeeStatus bit NULL;
+END
+ELSE
+BEGIN
+	PRINT 'EmployeeStatus Column Already Exist' 
+END
+
+IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.UserMst') AND name = 'JoiningDate')
+BEGIN
+	   ALTER TABLE UserMst add JoiningDate datetime NULL;
+END
+ELSE
+BEGIN
+	PRINT 'JoiningDate Column Already Exist' 
+END
+
+
+--added on 26-12-2023 by PP-------------------------------------------END-----------------------------------------------
+--executed on local by PP on 26-12-2023---------------------------------------------------------------------------------

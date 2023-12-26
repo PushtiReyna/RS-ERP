@@ -15,11 +15,17 @@ public partial class DBContext : DbContext
     {
     }
 
+    public virtual DbSet<AttritionTypeMst> AttritionTypeMsts { get; set; }
+
     public virtual DbSet<DepartmentMst> DepartmentMsts { get; set; }
 
     public virtual DbSet<DesignationMst> DesignationMsts { get; set; }
 
     public virtual DbSet<EmployeeTypeMst> EmployeeTypeMsts { get; set; }
+
+    public virtual DbSet<ReportingManagerMst> ReportingManagerMsts { get; set; }
+
+    public virtual DbSet<ResignMst> ResignMsts { get; set; }
 
     public virtual DbSet<RoleMst> RoleMsts { get; set; }
 
@@ -27,14 +33,26 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<UserMst> UserMsts { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    => optionsBuilder.UseSqlServer("Server=ARCHE-ITD440\\SQLEXPRESS;Database=RS_ERP;Trusted_Connection=True;TrustServerCertificate=True;");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=ARCHE-ITD440\\SQLEXPRESS;Database=RS_ERP;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AttritionTypeMst>(entity =>
+        {
+            entity.HasKey(e => e.AttritionTypeId).HasName("PK__Attritio__696BE7ECBB7F1E79");
+
+            entity.ToTable("AttritionTypeMst");
+
+            entity.Property(e => e.AttritionTypeName).HasMaxLength(30);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<DepartmentMst>(entity =>
         {
-            entity.HasKey(e => e.DepartmentId).HasName("PK__Departme__B2079BED58E9C880");
+            entity.HasKey(e => e.DepartmentId).HasName("PK__Departme__B2079BED4F8A184D");
 
             entity.ToTable("DepartmentMst");
 
@@ -45,7 +63,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<DesignationMst>(entity =>
         {
-            entity.HasKey(e => e.DesignationId).HasName("PK__Designat__BABD60DE3A687638");
+            entity.HasKey(e => e.DesignationId).HasName("PK__Designat__BABD60DEFC095B29");
 
             entity.ToTable("DesignationMst");
 
@@ -56,7 +74,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<EmployeeTypeMst>(entity =>
         {
-            entity.HasKey(e => e.EmployeeTypeId).HasName("PK__Employee__1F1B6A94371EAF71");
+            entity.HasKey(e => e.EmployeeTypeId).HasName("PK__Employee__1F1B6A94D79A4BA3");
 
             entity.ToTable("EmployeeTypeMst");
 
@@ -65,9 +83,34 @@ public partial class DBContext : DbContext
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
 
+        modelBuilder.Entity<ReportingManagerMst>(entity =>
+        {
+            entity.HasKey(e => e.ReportingManagerId).HasName("PK__Reportin__0C57AC941D90F91B");
+
+            entity.ToTable("ReportingManagerMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.ReportingManagerName).HasMaxLength(100);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ResignMst>(entity =>
+        {
+            entity.HasKey(e => e.ResignId).HasName("PK__ResignMs__4696AE4F33EB93E0");
+
+            entity.ToTable("ResignMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.DateOfResignation).HasColumnType("datetime");
+            entity.Property(e => e.FinalDate).HasColumnType("datetime");
+            entity.Property(e => e.FinalStatus).HasMaxLength(50);
+            entity.Property(e => e.Reason).HasMaxLength(100);
+            entity.Property(e => e.Region).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<RoleMst>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__RoleMst__8AFACE1AE10DC566");
+            entity.HasKey(e => e.RoleId).HasName("PK__RoleMst__8AFACE1AF2C0FB42");
 
             entity.ToTable("RoleMst");
 
@@ -78,7 +121,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<TokenMst>(entity =>
         {
-            entity.HasKey(e => e.TokenId).HasName("PK__TokenMst__658FEEEA671CFA77");
+            entity.HasKey(e => e.TokenId).HasName("PK__TokenMst__658FEEEA8727EECD");
 
             entity.ToTable("TokenMst");
 
@@ -90,7 +133,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<UserMst>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserMst__3214EC2734BDFDD5");
+            entity.HasKey(e => e.Id).HasName("PK__UserMst__3214EC274619AB48");
 
             entity.ToTable("UserMst");
 
@@ -102,6 +145,7 @@ public partial class DBContext : DbContext
             entity.Property(e => e.BankName).HasMaxLength(50);
             entity.Property(e => e.ComapanyAddress).HasMaxLength(100);
             entity.Property(e => e.CompanyName).HasMaxLength(100);
+            entity.Property(e => e.ContactNumber).HasMaxLength(50);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.CurrentAddress).HasMaxLength(100);
             entity.Property(e => e.CurrentAddressPostalCode).HasMaxLength(10);
@@ -117,6 +161,7 @@ public partial class DBContext : DbContext
             entity.Property(e => e.ExitDate).HasColumnType("datetime");
             entity.Property(e => e.FirstName).HasMaxLength(50);
             entity.Property(e => e.Gender).HasMaxLength(30);
+            entity.Property(e => e.JoiningDate).HasColumnType("datetime");
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.MartialStatus).HasMaxLength(50);
             entity.Property(e => e.MiddleName).HasMaxLength(50);
@@ -140,7 +185,6 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Ptamount)
                 .HasColumnType("decimal(13, 2)")
                 .HasColumnName("PTAmount");
-            entity.Property(e => e.ReportingManager).HasMaxLength(50);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
 

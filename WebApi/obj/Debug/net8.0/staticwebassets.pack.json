@@ -1,12 +1,16 @@
 {
   "Files": [
     {
-      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\11.jpg",
-      "PackagePath": "staticwebassets\\Images\\11.jpg"
-    },
-    {
       "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\book1.jfif",
       "PackagePath": "staticwebassets\\Images\\book1.jfif"
+    },
+    {
+      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\book2.jfif",
+      "PackagePath": "staticwebassets\\Images\\book2.jfif"
+    },
+    {
+      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\demo.jpg",
+      "PackagePath": "staticwebassets\\Images\\demo.jpg"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.WebApi.Microsoft.AspNetCore.StaticWebAssets.props",

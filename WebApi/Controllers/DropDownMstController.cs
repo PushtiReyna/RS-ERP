@@ -75,5 +75,19 @@ namespace WebApi.Controllers
             catch { throw; }
             return response;
         }
+        [HttpPost("ReportingManager")]
+        public async Task<CommonResponse> AddReportingManager(ReportingManagerReqViewModel reportingManagerReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iDropDownMst.AddReportingManager(reportingManagerReqViewModel.Adapt<ReportingManagerReqDTO>());
+                ReportingManagerResDTO reportingManagerResDTO = response.Data;
+                response.Data = reportingManagerResDTO.Adapt<ReportingManagerResViewModel>();
+            }
+            catch { throw; }
+            return response;
+        }
+
     }
 }
