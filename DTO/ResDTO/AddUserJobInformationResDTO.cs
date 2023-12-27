@@ -8,6 +8,6 @@ namespace DTO.ResDTO
 {
     public class AddUserJobInformationResDTO
     {
-
+        public int EmployeeId { get; set; }
     }
 }

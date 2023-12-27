@@ -307,3 +307,32 @@ END
 
 --added on 26-12-2023 by PP-------------------------------------------END-----------------------------------------------
 --executed on local by PP on 26-12-2023---------------------------------------------------------------------------------
+
+
+--added on 27-12-2023 by PP-------------------------------------------START---------------------------------------------
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
+			TABLE_NAME = 'HolidaysMst')
+BEGIN 
+	Create table dbo.HolidaysMst(
+			HolidayId int IDENTITY(1,1) Primary Key NOT NULL,
+			Name nvarchar(100) not null,
+			Date datetime not null,
+			Day nvarchar(50) not null,
+			IsActive bit NOT NULL,
+			IsDelete bit  NULL,
+			CreatedBy int NOT NULL,
+			CreatedDate datetime NOT NULL,
+			UpdatedBy int  NULL,
+			UpdatedDate datetime NULL
+			);
+	PRINT 'HolidaysMst Table Created' 
+END
+ELSE
+BEGIN 
+	PRINT 'HolidaysMst Table Already Exist' 
+END
+
+--added on 27-12-2023 by PP-------------------------------------------END-----------------------------------------------
+--executed on local by PP on 27-12-2023---------------------------------------------------------------------------------

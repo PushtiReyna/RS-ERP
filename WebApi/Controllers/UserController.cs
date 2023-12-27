@@ -1,4 +1,5 @@
-﻿using DTO.ReqDTO;
+﻿using Azure;
+using DTO.ReqDTO;
 using DTO.ResDTO;
 using Mapster;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +8,7 @@ using ServiceLayer;
 using ServiceLayer.CommonModels;
 using WebApi.ViewModel.ReqViewModel;
 using WebApi.ViewModel.ResViewModel;
+using static DTO.ResDTO.GetUserResDTO;
 
 namespace WebApi.Controllers
 {
@@ -20,15 +22,57 @@ namespace WebApi.Controllers
             _iUser = iUser;
         }
 
-        [HttpGet("Get User")]
-        public async Task<CommonResponse> GetUser()
+        [HttpPost("Get User")]
+        public async Task<CommonResponse> GetUser(GetUserReqViewModel getUserReqViewModel)
         {
             CommonResponse response = new CommonResponse();
             try
             {
-                response = await _iUser.GetUser();
-                List<GetUserResDTO> lstGetClientResDTO = response.Data;
-                response.Data = lstGetClientResDTO.Adapt<List<GetUserResViewModel>>();
+                response = await _iUser.GetUser(getUserReqViewModel.Adapt<GetUserReqDTO>());
+                GetUserResDTO lstGetUserResDTO = response.Data;
+                response.Data = lstGetUserResDTO.Adapt<GetUserResViewModel>();
+            }
+            catch { throw; }
+            return response;
+        }
+
+        [HttpPost("Get UserById PersonalInformation")]
+        public async Task<CommonResponse> GetUserByIdPersonalInformation(GetUserByIdPersonalInformationReqViewModel getUserByIdPersonalInformationReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iUser.GetUserByIdPersonalInformation(getUserByIdPersonalInformationReqViewModel.Adapt<GetUserByIdPersonalInformationReqDTO>());
+               List<GetUserByIdPersonalInformationResDTO> getUserByIdPersonalInformationResDTO = response.Data;
+                response.Data = getUserByIdPersonalInformationResDTO.Adapt<List<GetUserByIdPersonalInformationResViewModel>>();
+            }
+            catch { throw; }
+            return response;
+        }
+
+        [HttpPost("Get UserById JobInformation")]
+        public async Task<CommonResponse> GetUserByIdJobInformation(GetUserByIdJobInformationReqViewModel getUserByIdJobInformationReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iUser.GetUserByIdJobInformation(getUserByIdJobInformationReqViewModel.Adapt<GetUserByIdJobInformationReqDTO>());
+                List<GetUserByIdJobInformationResDTO> getUserByIdJobInformationResDTO = response.Data;
+                response.Data = getUserByIdJobInformationResDTO.Adapt<List<GetUserByIdJobInformationResViewModel>>();
+            }
+            catch { throw; }
+            return response;
+        }
+
+        [HttpPost("Get UserById BankAndSalaryInformation")]
+        public async Task<CommonResponse> GetUserByIdBankAndSalaryInformation(GetUserByIdJBankAndSalaryInformationReqViewModel getUserByIdBankAndSalaryInformationReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iUser.GetUserByIdBankAndSalaryInformation(getUserByIdBankAndSalaryInformationReqViewModel.Adapt<GetUserByIdBankAndSalaryInformationReqDTO>());
+                List<GetUserByIdBankAndSalaryInformationResDTO> getUserByIdBankAndSalaryInformationResDTO = response.Data;
+                response.Data = getUserByIdBankAndSalaryInformationResDTO.Adapt<List<GetUserByIdBankAndSalaryInformationResViewModel>>();
             }
             catch { throw; }
             return response;

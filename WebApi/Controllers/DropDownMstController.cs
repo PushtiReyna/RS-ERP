@@ -88,6 +88,19 @@ namespace WebApi.Controllers
             catch { throw; }
             return response;
         }
+        [HttpPost("Attretion Type")]
+        public async Task<CommonResponse> AddAttritionType(AttritionTypeReqViewModel attritionTypeReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iDropDownMst.AddAttritionType(attritionTypeReqViewModel.Adapt<AttritionTypeReqDTO>());
+                AttritionTypeResDTO attritionTypeResDTO = response.Data;
+                response.Data = attritionTypeResDTO.Adapt<AttritionTypeResViewModel>();
+            }
+            catch { throw; }
+            return response;
+        }
 
     }
 }

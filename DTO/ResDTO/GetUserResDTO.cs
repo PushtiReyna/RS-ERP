@@ -8,6 +8,10 @@ namespace DTO.ResDTO
 {
     public class GetUserResDTO
     {
+        public List<UserList> userLists { get; set; }
+    }
+    public class UserList
+    {
         public string? Image { get; set; }
         public int EmployeeId { get; set; }
         public string? FullName { get; set; }
@@ -17,5 +21,6 @@ namespace DTO.ResDTO
         public bool? EmployeeStatus { get; set; }
         public DateTime? JoiningDate { get; set; }
         public string RoleType { get; set; }
+
     }
 }

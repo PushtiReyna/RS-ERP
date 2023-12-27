@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static DTO.ResDTO.GetUserResDTO;
 
 namespace BusinessLayer
 {
@@ -28,16 +29,18 @@ namespace BusinessLayer
             _hostEnvironment = hostEnvironment;
         }
 
-        public async Task<CommonResponse> GetUser()
+        public async Task<CommonResponse> GetUser(GetUserReqDTO getUserReqDTO)
         {
             CommonResponse response = new CommonResponse();
             try
             {
                 GetUserResDTO getUserResDTO = new GetUserResDTO();
-                List<GetUserResDTO> lstGetSubCategoryResDTO = (from userDetail in _commonRepo.UserMstList().Where(x => x.EmployeeStatus == true)
+
+                List<UserList> lstUserList = new List<UserList>();
+                lstUserList = (from userDetail in _commonRepo.UserMstList().Where(x => x.EmployeeStatus == true)
                                                                join roleDetail in _commonRepo.RoleMstList()
                                                                       on userDetail.RoleId equals roleDetail.RoleId
-                                                               select new GetUserResDTO
+                                                               select new UserList
                                                                {
                                                                    EmployeeId = userDetail.EmployeeId,
                                                                    Email = userDetail.Email,
@@ -47,10 +50,14 @@ namespace BusinessLayer
                                                                    JoiningDate = userDetail.JoiningDate,
                                                                    Image = userDetail.Image,
                                                                    FullName = userDetail.FirstName + " " + userDetail.MiddleName + " " + userDetail.LastName
-                                                               }).ToList().Adapt<List<GetUserResDTO>>();
-                if (lstGetSubCategoryResDTO.Count > 0)
+                                                               }).OrderBy(x => x.EmployeeId)
+                                                                  .Skip((getUserReqDTO.Page -1) * getUserReqDTO.ItemsPerPage)
+                                                                  .Take(getUserReqDTO.ItemsPerPage)
+                                                                  .ToList()/*.Adapt<List<GetUserResDTO>>()*/;
+               getUserResDTO.userLists = lstUserList ;
+                if (lstUserList.Count > 0)
                 {
-                    response.Data = lstGetSubCategoryResDTO;
+                    response.Data = getUserResDTO;
                     response.Message = "list of users get successfully";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
@@ -61,6 +68,84 @@ namespace BusinessLayer
                     response.Status = false;
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 }
+            }
+            catch { throw; }
+            return response;
+        }
+
+        public async Task<CommonResponse> GetUserByIdPersonalInformation(GetUserByIdPersonalInformationReqDTO getUserByIdPersonalInformationReqDTO)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                List<GetUserByIdPersonalInformationResDTO> lstGetUserByIdPersonalInformation = _commonRepo.UserMstList().Where(x => x.EmployeeId == getUserByIdPersonalInformationReqDTO.EmployeeId).ToList().Adapt<List<GetUserByIdPersonalInformationResDTO>>();
+
+                if(lstGetUserByIdPersonalInformation.Count > 0)
+                {
+                    response.Data = lstGetUserByIdPersonalInformation;
+                    response.Message = "user personal information data are found";
+                    response.Status = true;
+                    response.StatusCode = System.Net.HttpStatusCode.OK;
+                }
+                else
+                {
+                    response.Message = "users data not found";
+                    response.Status = false;
+                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                }
+
+            }
+            catch { throw; }
+            return response;
+        }
+
+        public async Task<CommonResponse> GetUserByIdJobInformation(GetUserByIdJobInformationReqDTO getUserByIdJobInformationReqDTO)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                List<GetUserByIdJobInformationResDTO> lstGetUserByIdJobInformationResDTO = _commonRepo.UserMstList().Where(x => x.EmployeeId == getUserByIdJobInformationReqDTO.EmployeeId).ToList().Adapt<List<GetUserByIdJobInformationResDTO>>();
+
+                if (lstGetUserByIdJobInformationResDTO.Count > 0)
+                {
+                    response.Data = lstGetUserByIdJobInformationResDTO;
+                    response.Message = "user Job information data are found";
+                    response.Status = true;
+                    response.StatusCode = System.Net.HttpStatusCode.OK;
+                }
+                else
+                {
+                    response.Message = "users data not found";
+                    response.Status = false;
+                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                }
+
+            }
+            catch { throw; }
+            return response;
+        }
+
+        public async Task<CommonResponse> GetUserByIdBankAndSalaryInformation(GetUserByIdBankAndSalaryInformationReqDTO getUserByIdBankAndSalaryInformationReqDTO)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                List<GetUserByIdBankAndSalaryInformationResDTO> lstGetUserByIdBankAndSalaryInformationResDTO = _commonRepo.UserMstList().Where(x => x.EmployeeId == getUserByIdBankAndSalaryInformationReqDTO.EmployeeId).ToList().Adapt<List<GetUserByIdBankAndSalaryInformationResDTO>>();
+
+                if (lstGetUserByIdBankAndSalaryInformationResDTO.Count > 0)
+                {
+                    response.Data = lstGetUserByIdBankAndSalaryInformationResDTO;
+                    response.Message = "user Bank & Salary information data are found";
+                    response.Status = true;
+                    response.StatusCode = System.Net.HttpStatusCode.OK;
+                }
+                else
+                {
+                    response.Message = "users data not found";
+                    response.Status = false;
+                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                }
+
             }
             catch { throw; }
             return response;
@@ -78,8 +163,15 @@ namespace BusinessLayer
                 if (userDetail == null)
                 {
                     userMst.EmployeeId = addUserPersonalInformationReqDTO.EmployeeId;
-                    string imgName = uploadUserImage(addUserPersonalInformationReqDTO.Image);
-                    userMst.Image = imgName;
+                    if(addUserPersonalInformationReqDTO.Image != null)
+                    {
+                        string imgName = uploadUserImage(addUserPersonalInformationReqDTO.Image);
+                        userMst.Image = imgName;
+                    }
+                    else
+                    {
+                        userMst.Image = addUserPersonalInformationReqDTO.Image;
+                    }
                     userMst.FirstName = addUserPersonalInformationReqDTO.FirstName;
                     userMst.MiddleName = addUserPersonalInformationReqDTO.MiddleName;
                     userMst.LastName = addUserPersonalInformationReqDTO.LastName;
@@ -144,7 +236,7 @@ namespace BusinessLayer
                     userDetail.NoticePeriod = addUserJobInformationReqDTO.NoticePeriod;
                     userDetail.RoleId = addUserJobInformationReqDTO.RoleId;
                     userDetail.ReportingManagerId = addUserJobInformationReqDTO.ReportingManagerId;
-                    userDetail.UpdatedBy = userDetail.EmployeeId;
+                    userDetail.UpdatedBy = 1;
                     userDetail.UpdatedDate = DateTime.Now;
 
                     _dbContext.Entry(userDetail).State = EntityState.Modified;
@@ -192,7 +284,7 @@ namespace BusinessLayer
                     userDetail.PfApplicable = addUserBankAndSalaryInformationReqDTO.PfApplicable;
                     userDetail.PtApplicable = addUserBankAndSalaryInformationReqDTO.PtApplicable;
                     userDetail.EsiApplicable = addUserBankAndSalaryInformationReqDTO.EsiApplicable;
-                    userDetail.UpdatedBy = userDetail.EmployeeId;
+                    userDetail.UpdatedBy = 1;
                     userDetail.UpdatedDate = DateTime.Now;
 
                     _dbContext.Entry(userDetail).State = EntityState.Modified;
@@ -225,8 +317,16 @@ namespace BusinessLayer
                 var userDetail = await _commonRepo.UserMstList().FirstOrDefaultAsync(x => x.EmployeeId == updateUserPersonalInformationReqDTO.EmployeeId);
                 if (userDetail != null)
                 {
-                    string imgName = uploadUserImage(updateUserPersonalInformationReqDTO.Image);
-                    userDetail.Image = imgName;
+                    if(updateUserPersonalInformationReqDTO.Image != null)
+                    {
+                        string imgName = uploadUserImage(updateUserPersonalInformationReqDTO.Image);
+                        userDetail.Image = imgName;
+                    }
+                    else
+                    {
+                        userDetail.Image = updateUserPersonalInformationReqDTO.Image;
+                    }
+                  
                     userDetail.FirstName = updateUserPersonalInformationReqDTO.FirstName;
                     userDetail.MiddleName = updateUserPersonalInformationReqDTO.MiddleName;
                     userDetail.LastName = updateUserPersonalInformationReqDTO.LastName;
@@ -242,7 +342,7 @@ namespace BusinessLayer
                     userDetail.PermanentAddressPostalCode = updateUserPersonalInformationReqDTO.PermanentAddressPostalCode;
                     userDetail.CurrentAddress = updateUserPersonalInformationReqDTO.CurrentAddress;
                     userDetail.CurrentAddressPostalCode = updateUserPersonalInformationReqDTO.CurrentAddressPostalCode;
-                    userDetail.UpdatedBy = userDetail.EmployeeId;
+                    userDetail.UpdatedBy = 1;
                     userDetail.UpdatedDate = DateTime.Now;
 
                     _dbContext.Entry(userDetail).State = EntityState.Modified;
@@ -288,7 +388,7 @@ namespace BusinessLayer
                     userDetail.NoticePeriod = updateUserJobInformationReqDTO.NoticePeriod;
                     userDetail.RoleId = updateUserJobInformationReqDTO.RoleId;
                     userDetail.ReportingManagerId = updateUserJobInformationReqDTO.ReportingManagerId;
-                    userDetail.UpdatedBy = userDetail.EmployeeId;
+                    userDetail.UpdatedBy = 1;
                     userDetail.UpdatedDate = DateTime.Now;
 
                     _dbContext.Entry(userDetail).State = EntityState.Modified;
@@ -336,7 +436,7 @@ namespace BusinessLayer
                     userDetail.PfApplicable = updateUserBankAndSalaryInformationReqDTO.PfApplicable;
                     userDetail.PtApplicable = updateUserBankAndSalaryInformationReqDTO.PtApplicable;
                     userDetail.EsiApplicable = updateUserBankAndSalaryInformationReqDTO.EsiApplicable;
-                    userDetail.UpdatedBy = userDetail.EmployeeId;
+                    userDetail.UpdatedBy = 1;
                     userDetail.UpdatedDate = DateTime.Now;
 
                     _dbContext.Entry(userDetail).State = EntityState.Modified;
@@ -370,7 +470,7 @@ namespace BusinessLayer
                 if (userDetail != null)
                 {
                     userDetail.IsDelete = true;
-                    userDetail.UpdatedBy = userDetail.EmployeeId;
+                    userDetail.UpdatedBy = 1;
                     userDetail.UpdatedDate = DateTime.Now;
                     userDetail.EmployeeStatus = false;
                     _dbContext.Entry(userDetail).State = EntityState.Modified;
@@ -415,7 +515,7 @@ namespace BusinessLayer
                         resignMst.Region = resignReqDTO.Region;
                         resignMst.FinalDate = resignReqDTO.FinalDate;
                         resignMst.FinalStatus = resignReqDTO.FinalStatus;
-                        resignMst.CreatedBy = userDetail.EmployeeId;
+                        resignMst.CreatedBy = 1;
                         resignMst.CreatedDate = DateTime.Now;
 
                         _dbContext.ResignMsts.Add(resignMst);
@@ -445,7 +545,6 @@ namespace BusinessLayer
             catch { throw; }
             return response;
         }
-
 
         public string uploadUserImage(dynamic imgPath)
         {

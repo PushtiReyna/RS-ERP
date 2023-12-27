@@ -23,6 +23,8 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<EmployeeTypeMst> EmployeeTypeMsts { get; set; }
 
+    public virtual DbSet<HolidaysMst> HolidaysMsts { get; set; }
+
     public virtual DbSet<ReportingManagerMst> ReportingManagerMsts { get; set; }
 
     public virtual DbSet<ResignMst> ResignMsts { get; set; }
@@ -33,9 +35,8 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<UserMst> UserMsts { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=ARCHE-ITD440\\SQLEXPRESS;Database=RS_ERP;Trusted_Connection=True;TrustServerCertificate=True;");
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //    => optionsBuilder.UseSqlServer("Server=ARCHE-ITD440\\SQLEXPRESS;Database=RS_ERP;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,6 +81,19 @@ public partial class DBContext : DbContext
 
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.EmployeeType).HasMaxLength(50);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<HolidaysMst>(entity =>
+        {
+            entity.HasKey(e => e.HolidayId).HasName("PK__Holidays__2D35D57A024B3F87");
+
+            entity.ToTable("HolidaysMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.Day).HasMaxLength(50);
+            entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
 

@@ -253,7 +253,6 @@ namespace BusinessLayer
             catch { throw; }
             return response;
         }
-
         public async Task<CommonResponse> AddAttritionType(AttritionTypeReqDTO attritionTypeReqDTO)
         {
             CommonResponse response = new CommonResponse();
@@ -300,6 +299,5 @@ namespace BusinessLayer
             catch { throw; }
             return response;
         }
-
     }
 }

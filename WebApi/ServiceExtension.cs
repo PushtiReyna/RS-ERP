@@ -22,6 +22,9 @@ namespace WebApi
             service.AddScoped<IUser, UserImpl>();
             service.AddScoped<UserBLL>();
 
+            service.AddScoped<IHoliday, HolidayImpl>();
+            service.AddScoped<HolidayBLL>();
+
         }
     }
 }

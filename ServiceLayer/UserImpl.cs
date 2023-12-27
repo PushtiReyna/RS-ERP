@@ -18,7 +18,10 @@ namespace ServiceLayer
             _userBLL = userBLL;
         }
 
-        public async Task<CommonResponse> GetUser() => await _userBLL.GetUser();
+        public async Task<CommonResponse> GetUser(GetUserReqDTO getUserReqDTO) => await _userBLL.GetUser(getUserReqDTO);
+        public async Task<CommonResponse> GetUserByIdPersonalInformation(GetUserByIdPersonalInformationReqDTO getUserByIdPersonalInformationReqDTO) => await _userBLL.GetUserByIdPersonalInformation(getUserByIdPersonalInformationReqDTO);
+        public async Task<CommonResponse> GetUserByIdJobInformation(GetUserByIdJobInformationReqDTO getUserByIdJobInformationReqDTO) => await _userBLL.GetUserByIdJobInformation(getUserByIdJobInformationReqDTO);
+        public async Task<CommonResponse> GetUserByIdBankAndSalaryInformation(GetUserByIdBankAndSalaryInformationReqDTO getUserByIdBankAndSalaryInformationReqDTO) => await _userBLL.GetUserByIdBankAndSalaryInformation(getUserByIdBankAndSalaryInformationReqDTO);
         public async Task<CommonResponse> AddUserPersonalInformation(AddUserPersonalInformationReqDTO addUserPersonalInformationReqDTO) => await _userBLL.AddUserPersonalInformation(addUserPersonalInformationReqDTO);
         public async Task<CommonResponse> AddUserJobInformation(AddUserJobInformationReqDTO addUserJobInformationReqDTO) => await _userBLL.AddUserJobInformation(addUserJobInformationReqDTO);
         public async Task<CommonResponse> AddUserBankAndSalaryInformation(AddUserBankAndSalaryInformationReqDTO addUserBankAndSalaryInformationReqDTO) => await _userBLL.AddUserBankAndSalaryInformation(addUserBankAndSalaryInformationReqDTO);
@@ -32,7 +35,10 @@ namespace ServiceLayer
     }
     public interface IUser
     {
-        public Task<CommonResponse> GetUser();
+        public Task<CommonResponse> GetUser(GetUserReqDTO getUserReqDTO);
+        public Task<CommonResponse> GetUserByIdPersonalInformation(GetUserByIdPersonalInformationReqDTO getUserByIdPersonalInformationReqDTO);
+        public Task<CommonResponse> GetUserByIdJobInformation(GetUserByIdJobInformationReqDTO getUserByIdJobInformationReqDTO);
+        public Task<CommonResponse> GetUserByIdBankAndSalaryInformation(GetUserByIdBankAndSalaryInformationReqDTO getUserByIdBankAndSalaryInformationReqDTO);
         public Task<CommonResponse> AddUserPersonalInformation(AddUserPersonalInformationReqDTO addUserPersonalInformationReqDTO);
         public Task<CommonResponse> AddUserJobInformation(AddUserJobInformationReqDTO addUserJobInformationReqDTO);
         public Task<CommonResponse> AddUserBankAndSalaryInformation(AddUserBankAndSalaryInformationReqDTO addUserBankAndSalaryInformationReqDTO);
@@ -41,7 +47,6 @@ namespace ServiceLayer
         public Task<CommonResponse> UpdateUserBankAndSalaryInformation(UpdateUserBankAndSalaryInformationReqDTO updateUserBankAndSalaryInformationReqDTO);
         public Task<CommonResponse> DeleteUser(DeleteUserReqDTO deleteUserReqDTO);
         public Task<CommonResponse> AddResign(ResignReqDTO addResignReqDTO);
-
 
     }
 }
