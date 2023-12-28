@@ -8,7 +8,8 @@ namespace DTO.ResDTO
 {
     public class GetUserResDTO
     {
-        public List<UserList> userLists { get; set; }
+        public int TotalCount { get; set; }
+        public List<UserList> UserLists { get; set; }
     }
     public class UserList
     {

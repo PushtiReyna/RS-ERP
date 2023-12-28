@@ -8,5 +8,6 @@ namespace DTO.ResDTO
 {
     public class UpdateHolidayResDTO
     {
+        public int HolidayId { get; set; }
     }
 }

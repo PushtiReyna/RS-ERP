@@ -25,6 +25,8 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<HolidaysMst> HolidaysMsts { get; set; }
 
+    public virtual DbSet<LeaveMst> LeaveMsts { get; set; }
+
     public virtual DbSet<ReportingManagerMst> ReportingManagerMsts { get; set; }
 
     public virtual DbSet<ResignMst> ResignMsts { get; set; }
@@ -86,7 +88,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<HolidaysMst>(entity =>
         {
-            entity.HasKey(e => e.HolidayId).HasName("PK__Holidays__2D35D57A024B3F87");
+            entity.HasKey(e => e.HolidayId).HasName("PK__Holidays__2D35D57A2C0CA534");
 
             entity.ToTable("HolidaysMst");
 
@@ -94,6 +96,20 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Date).HasColumnType("datetime");
             entity.Property(e => e.Day).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<LeaveMst>(entity =>
+        {
+            entity.HasKey(e => e.LeaveId).HasName("PK__LeaveMst__796DB95992568AC0");
+
+            entity.ToTable("LeaveMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.LeaveFrom).HasColumnType("datetime");
+            entity.Property(e => e.LeaveReason).HasMaxLength(100);
+            entity.Property(e => e.LeaveStatus).HasMaxLength(50);
+            entity.Property(e => e.LeaveTo).HasColumnType("datetime");
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
 
@@ -135,7 +151,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<TokenMst>(entity =>
         {
-            entity.HasKey(e => e.TokenId).HasName("PK__TokenMst__658FEEEA8727EECD");
+            entity.HasKey(e => e.TokenId).HasName("PK__TokenMst__658FEEEAF03357E4");
 
             entity.ToTable("TokenMst");
 
@@ -147,7 +163,7 @@ public partial class DBContext : DbContext
 
         modelBuilder.Entity<UserMst>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserMst__3214EC274619AB48");
+            entity.HasKey(e => e.Id).HasName("PK__UserMst__3214EC27024423BE");
 
             entity.ToTable("UserMst");
 

@@ -100,7 +100,7 @@ namespace WebApi.Controllers
             {
                 response = await _iUser.AddUserJobInformation(addUserJobInformationReqViewModel.Adapt<AddUserJobInformationReqDTO>());
                 AddUserJobInformationResDTO addUserJobInformationResDTO = response.Data;
-                response.Data = addUserJobInformationResDTO.Adapt<AddUserJobInformationReqViewModel>();
+                response.Data = addUserJobInformationResDTO.Adapt<AddUserJobInformationResViewModel>();
             }
             catch { throw; }
             return response;

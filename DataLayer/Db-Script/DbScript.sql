@@ -336,3 +336,36 @@ END
 
 --added on 27-12-2023 by PP-------------------------------------------END-----------------------------------------------
 --executed on local by PP on 27-12-2023---------------------------------------------------------------------------------
+
+
+--added on 28-12-2023 by PP-------------------------------------------START---------------------------------------------
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
+			TABLE_NAME = 'LeaveMst')
+BEGIN 
+	Create table dbo.LeaveMst(
+			LeaveId int IDENTITY(1,1) Primary Key NOT NULL,
+			EmployeeId int NOT NULL,
+			LeaveFrom datetime not null,
+			LeaveTo datetime not null,
+			NumberOfDays int NOT NULL,
+			RemainingLeaves int NOT NULL,
+			LeaveReason nvarchar(100) not null,
+			LeaveStatus bit  NULL,
+			IsActive bit NOT NULL,
+			IsDelete bit  NULL,
+			CreatedBy int NOT NULL,
+			CreatedDate datetime NOT NULL,
+			UpdatedBy int NULL,
+			UpdatedDate datetime NULL
+			);
+	PRINT 'LeaveMst Table Created' 
+END
+ELSE
+BEGIN 
+	PRINT 'LeaveMst Table Already Exist' 
+END
+
+--added on 28-12-2023 by PP-------------------------------------------END-----------------------------------------------
+--executed on local by PP on 28-12-2023---------------------------------------------------------------------------------

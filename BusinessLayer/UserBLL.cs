@@ -50,11 +50,13 @@ namespace BusinessLayer
                                                                    JoiningDate = userDetail.JoiningDate,
                                                                    Image = userDetail.Image,
                                                                    FullName = userDetail.FirstName + " " + userDetail.MiddleName + " " + userDetail.LastName
-                                                               }).OrderBy(x => x.EmployeeId)
-                                                                  .Skip((getUserReqDTO.Page -1) * getUserReqDTO.ItemsPerPage)
-                                                                  .Take(getUserReqDTO.ItemsPerPage)
-                                                                  .ToList()/*.Adapt<List<GetUserResDTO>>()*/;
-               getUserResDTO.userLists = lstUserList ;
+                                                               }).ToList()/*.Adapt<List<GetUserResDTO>>()*/;
+
+                getUserResDTO.TotalCount = lstUserList.Count;
+                getUserResDTO.UserLists = lstUserList.OrderBy(x => x.EmployeeId)
+                                                                  .Skip((getUserReqDTO.Page - 1) * getUserReqDTO.ItemsPerPage)
+                                                                  .Take(getUserReqDTO.ItemsPerPage).ToList();
+             
                 if (lstUserList.Count > 0)
                 {
                     response.Data = getUserResDTO;
@@ -242,7 +244,7 @@ namespace BusinessLayer
                     _dbContext.Entry(userDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
 
-                    addUserJobInformationReqDTO.EmployeeId = userDetail.EmployeeId;
+                    addUserJobInformationResDTO.EmployeeId = userDetail.EmployeeId;
                     response.Data = addUserJobInformationResDTO;
                     response.Message = "user Job information added successfully";
                     response.Status = true;
@@ -317,42 +319,52 @@ namespace BusinessLayer
                 var userDetail = await _commonRepo.UserMstList().FirstOrDefaultAsync(x => x.EmployeeId == updateUserPersonalInformationReqDTO.EmployeeId);
                 if (userDetail != null)
                 {
-                    if(updateUserPersonalInformationReqDTO.Image != null)
+
+                    if (_commonRepo.UserMstList().FirstOrDefault(x => x.Email.Trim() == updateUserPersonalInformationReqDTO.Email.Trim() && x.EmployeeId != updateUserPersonalInformationReqDTO.EmployeeId) != null)
                     {
-                        string imgName = uploadUserImage(updateUserPersonalInformationReqDTO.Image);
-                        userDetail.Image = imgName;
+                        response.Message = "user email already exists";
+                        response.Status = false;
+                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                     }
                     else
                     {
-                        userDetail.Image = updateUserPersonalInformationReqDTO.Image;
+                        if (updateUserPersonalInformationReqDTO.Image != null)
+                        {
+                            string imgName = uploadUserImage(updateUserPersonalInformationReqDTO.Image);
+                            userDetail.Image = imgName;
+                        }
+                        else
+                        {
+                            userDetail.Image = updateUserPersonalInformationReqDTO.Image;
+                        }
+
+                        userDetail.FirstName = updateUserPersonalInformationReqDTO.FirstName;
+                        userDetail.MiddleName = updateUserPersonalInformationReqDTO.MiddleName;
+                        userDetail.LastName = updateUserPersonalInformationReqDTO.LastName;
+                        userDetail.Email = updateUserPersonalInformationReqDTO.Email;
+                        userDetail.Gender = updateUserPersonalInformationReqDTO.Gender;
+                        userDetail.DateOfBirth = updateUserPersonalInformationReqDTO.DateOfBirth;
+                        userDetail.ContactNumber = updateUserPersonalInformationReqDTO.ContactNumber;
+                        userDetail.EmergencyContactName = updateUserPersonalInformationReqDTO.EmergencyContactName;
+                        userDetail.EmergencyContactNo = updateUserPersonalInformationReqDTO.EmergencyContactNo;
+                        userDetail.Password = updateUserPersonalInformationReqDTO.Password;
+                        userDetail.MartialStatus = updateUserPersonalInformationReqDTO.MartialStatus;
+                        userDetail.PermanentAddress = updateUserPersonalInformationReqDTO.PermanentAddress;
+                        userDetail.PermanentAddressPostalCode = updateUserPersonalInformationReqDTO.PermanentAddressPostalCode;
+                        userDetail.CurrentAddress = updateUserPersonalInformationReqDTO.CurrentAddress;
+                        userDetail.CurrentAddressPostalCode = updateUserPersonalInformationReqDTO.CurrentAddressPostalCode;
+                        userDetail.UpdatedBy = 1;
+                        userDetail.UpdatedDate = DateTime.Now;
+
+                        _dbContext.Entry(userDetail).State = EntityState.Modified;
+                        _dbContext.SaveChanges();
+
+                        updateUserPersonalInformationResDTO.EmployeeId = userDetail.EmployeeId;
+                        response.Data = updateUserPersonalInformationResDTO;
+                        response.Message = "User personal information updated successfully";
+                        response.Status = true;
+                        response.StatusCode = System.Net.HttpStatusCode.OK;
                     }
-                  
-                    userDetail.FirstName = updateUserPersonalInformationReqDTO.FirstName;
-                    userDetail.MiddleName = updateUserPersonalInformationReqDTO.MiddleName;
-                    userDetail.LastName = updateUserPersonalInformationReqDTO.LastName;
-                    userDetail.Email = updateUserPersonalInformationReqDTO.Email;
-                    userDetail.Gender = updateUserPersonalInformationReqDTO.Gender;
-                    userDetail.DateOfBirth = updateUserPersonalInformationReqDTO.DateOfBirth;
-                    userDetail.ContactNumber = updateUserPersonalInformationReqDTO.ContactNumber;
-                    userDetail.EmergencyContactName = updateUserPersonalInformationReqDTO.EmergencyContactName;
-                    userDetail.EmergencyContactNo = updateUserPersonalInformationReqDTO.EmergencyContactNo;
-                    userDetail.Password = updateUserPersonalInformationReqDTO.Password;
-                    userDetail.MartialStatus = updateUserPersonalInformationReqDTO.MartialStatus;
-                    userDetail.PermanentAddress = updateUserPersonalInformationReqDTO.PermanentAddress;
-                    userDetail.PermanentAddressPostalCode = updateUserPersonalInformationReqDTO.PermanentAddressPostalCode;
-                    userDetail.CurrentAddress = updateUserPersonalInformationReqDTO.CurrentAddress;
-                    userDetail.CurrentAddressPostalCode = updateUserPersonalInformationReqDTO.CurrentAddressPostalCode;
-                    userDetail.UpdatedBy = 1;
-                    userDetail.UpdatedDate = DateTime.Now;
-
-                    _dbContext.Entry(userDetail).State = EntityState.Modified;
-                    _dbContext.SaveChanges();
-
-                    updateUserPersonalInformationResDTO.EmployeeId = userDetail.EmployeeId;
-                    response.Data = updateUserPersonalInformationResDTO;
-                    response.Message = "User personal information updated successfully";
-                    response.Status = true;
-                    response.StatusCode = System.Net.HttpStatusCode.OK;
                 }
                 else
                 {
@@ -360,7 +372,6 @@ namespace BusinessLayer
                     response.Message = "User not exists";
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 }
-
             }
             catch { throw; }
             return response;

@@ -28,8 +28,8 @@ namespace WebApi.Controllers
             try
             {
                 response = await _iHoliday.GetHolidayList();
-                List<GetUserResDTO> lstGetUserResDTO = response.Data;
-                response.Data = lstGetUserResDTO.Adapt<List<GetHolidayResViewModel>>();
+                List<GetHolidayResDTO> lstGetHolidayResDTO = response.Data;
+                response.Data = lstGetHolidayResDTO.Adapt<List<GetHolidayResViewModel>>();
             }
             catch { throw; }
             return response;

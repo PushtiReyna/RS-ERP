@@ -2,7 +2,8 @@
 {
     public class GetUserResViewModel
     {
-        public List<UserList> userLists { get; set; }
+        public int TotalCount { get; set; }
+        public List<UserList> UserLists { get; set; }
     }
 
     public class UserList

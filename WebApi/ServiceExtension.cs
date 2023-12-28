@@ -25,6 +25,9 @@ namespace WebApi
             service.AddScoped<IHoliday, HolidayImpl>();
             service.AddScoped<HolidayBLL>();
 
+            service.AddScoped<ILeave, LeaveImpl>();
+            service.AddScoped<LeaveBLL>();
+
         }
     }
 }

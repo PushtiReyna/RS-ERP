@@ -1,4 +1,6 @@
-﻿namespace WebApi.ViewModel.ReqViewModel
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApi.ViewModel.ReqViewModel
 {
     public class AddUserJobInformationReqViewModel
     {
@@ -12,9 +14,13 @@
 
         public int? DesignationId { get; set; }
 
+        [DataType(DataType.DateTime)]
         public DateTime? JoiningDate { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime? OfferDate { get; set; }
 
+        [DataType(DataType.DateTime)]
         public DateTime? ExitDate { get; set; }
 
         public string? ComapanyAddress { get; set; }

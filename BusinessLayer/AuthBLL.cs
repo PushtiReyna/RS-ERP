@@ -51,13 +51,7 @@ namespace BusinessLayer
                 var userDetail = await  _commonRepo.UserMstList().FirstOrDefaultAsync(x => x.EmployeeId == changePasswordReqDTO.EmployeeId);
                 if (userDetail != null)
                 {
-                    if (userDetail.Password.Trim() == changePasswordReqDTO.NewPassword.Trim())
-                    {
-                        response.Message = " password is already exists";
-                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                        return response;
-                    }
-                    else
+                    if (userDetail.Password.Trim() == changePasswordReqDTO.Password.Trim())
                     {
                         userDetail.Password = changePasswordReqDTO.NewPassword.Trim();
                         userDetail.UpdatedDate = DateTime.Now;
@@ -70,6 +64,18 @@ namespace BusinessLayer
                         response.Message = "changepassword successfully";
                         response.Status = true;
                         response.StatusCode = System.Net.HttpStatusCode.OK;
+                    }
+                    else if (userDetail.Password.Trim() == changePasswordReqDTO.NewPassword.Trim())
+                    {
+                        response.Message = " password is already exists";
+                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                        return response;
+                    }
+                    else
+                    {
+                        response.Message = "old password is not correct";
+                        response.Status = false;
+                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                     }
                 }
                 else

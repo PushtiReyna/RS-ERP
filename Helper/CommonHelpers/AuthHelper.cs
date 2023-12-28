@@ -78,6 +78,8 @@ namespace ServiceLayer.CommonHelpers
                         tokenDetail.UpdatedDate = DateTime.Now;
                         _dbContext.Entry(tokenDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();
+
+                        loginResDTO.TokenExpiryTime = tokenDetail.TokenExpiryTime;
                     }
                     else
                     {
@@ -89,10 +91,12 @@ namespace ServiceLayer.CommonHelpers
                         tokenMst.EmployeeId = userDetail.EmployeeId;
                         _dbContext.TokenMsts.Add(tokenMst);
                         _dbContext.SaveChanges();
+
+                        loginResDTO.TokenExpiryTime = tokenMst.TokenExpiryTime;
                     }
                     loginResDTO.Token = tokenString;
                     loginResDTO.RefreshToken = refreshtokenstring;
-                    loginResDTO.TokenExpiryTime = tokenMst.TokenExpiryTime;
+                    
                     loginResDTO.Email = userDetail.Email;
 
                     response.Data = loginResDTO;
@@ -186,13 +190,14 @@ namespace ServiceLayer.CommonHelpers
                                 tokenDetail.Token = tokenString;
                                 tokenDetail.TokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:TokenExpiryMin"]));
                                 tokenDetail.RefreshToken = refreshtokenstring;
-                                tokenDetail.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryMin"]));
                                 tokenDetail.UpdatedDate = DateTime.Now;
                                 _dbContext.Entry(tokenDetail).State = EntityState.Modified;
                                 _dbContext.SaveChanges();
 
                                 tokenResDTO.Token = tokenString;
                                 tokenResDTO.RefreshToken = refreshtokenstring;
+                                tokenResDTO.RefreshTokenExpiryTime = tokenDetail.RefreshTokenExpiryTime;
+                               
 
                                 response.Data = tokenResDTO;
                                 response.Message = "new token generated successfully";

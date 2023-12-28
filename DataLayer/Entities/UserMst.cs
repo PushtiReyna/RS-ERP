@@ -91,6 +91,12 @@ public partial class UserMst
 
     public bool? EsiApplicable { get; set; }
 
+    public DateTime? JoiningDate { get; set; }
+
+    public bool? EmployeeStatus { get; set; }
+
+    public string? ContactNumber { get; set; }
+
     public bool IsActive { get; set; }
 
     public bool? IsDelete { get; set; }
@@ -102,10 +108,4 @@ public partial class UserMst
     public int? UpdatedBy { get; set; }
 
     public DateTime? UpdatedDate { get; set; }
-
-    public string? ContactNumber { get; set; }
-
-    public bool? EmployeeStatus { get; set; }
-
-    public DateTime? JoiningDate { get; set; }
 }

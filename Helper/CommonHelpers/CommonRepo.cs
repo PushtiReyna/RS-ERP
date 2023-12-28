@@ -43,6 +43,14 @@ namespace ServiceLayer.CommonHelpers
         {
             return _dbContext.AttritionTypeMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
         }
+        public IQueryable<HolidaysMst> HolidayMstsList(bool isActive = true, bool isDelete = false)
+        {
+            return _dbContext.HolidaysMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
+        }
+        public IQueryable<LeaveMst> LeaveMstsList(bool isActive = true, bool isDelete = false)
+        {
+            return _dbContext.LeaveMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
+        }
         public IQueryable<ResignMst> ResignMstsList()
         {
             return _dbContext.ResignMsts.AsQueryable();
