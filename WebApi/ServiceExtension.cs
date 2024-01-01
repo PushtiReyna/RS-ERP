@@ -19,14 +19,17 @@ namespace WebApi
             service.AddScoped<IDropDownMst, DropDownMstImpl>();
             service.AddScoped<DropDownMstBLL>();
 
-            service.AddScoped<IUser, UserImpl>();
-            service.AddScoped<UserBLL>();
+            service.AddScoped<IEmployee, EmployeeImpl>();
+            service.AddScoped<EmployeeBLL>();
 
             service.AddScoped<IHoliday, HolidayImpl>();
             service.AddScoped<HolidayBLL>();
 
             service.AddScoped<ILeave, LeaveImpl>();
             service.AddScoped<LeaveBLL>();
+
+            service.AddScoped<IAttendance, AttendanceImpl>();
+            service.AddScoped<AttendanceBLL>();
 
         }
     }

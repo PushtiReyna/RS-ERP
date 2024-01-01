@@ -21,7 +21,7 @@ namespace WebApi.Controllers
             _iDropDownMst = idropDownMst;
         }
 
-        [HttpPost("EmployeeType")]
+        [HttpPost("AddEmployeeType")]
         public async Task<CommonResponse> AddEmployeeType(EmployeeTypeReqViewModel employeeTypeReqViewModel)
         {
             CommonResponse response = new CommonResponse();
@@ -35,7 +35,7 @@ namespace WebApi.Controllers
             return response;
         }
 
-        [HttpPost("Department")]
+        [HttpPost("AddDepartment")]
         public async Task<CommonResponse> AddDepartment(DepartmentReqViewModel departmentReqViewModel)
         {
             CommonResponse response = new CommonResponse();
@@ -49,7 +49,7 @@ namespace WebApi.Controllers
             return response;
         }
 
-        [HttpPost("Designation")]
+        [HttpPost("AddDesignation")]
         public async Task<CommonResponse>AddDesignation(DesignationReqViewModel designationReqViewModel)
         {
             CommonResponse response = new CommonResponse();
@@ -62,7 +62,7 @@ namespace WebApi.Controllers
             catch { throw; }
             return response;
         }
-        [HttpPost("RoleType")]
+        [HttpPost("AddRoleType")]
         public async Task<CommonResponse> AddRoleType(RoleReqViewModel roleReqViewModel)
         {
             CommonResponse response = new CommonResponse();
@@ -75,7 +75,7 @@ namespace WebApi.Controllers
             catch { throw; }
             return response;
         }
-        [HttpPost("ReportingManager")]
+        [HttpPost("AddReportingManager")]
         public async Task<CommonResponse> AddReportingManager(ReportingManagerReqViewModel reportingManagerReqViewModel)
         {
             CommonResponse response = new CommonResponse();
@@ -88,7 +88,7 @@ namespace WebApi.Controllers
             catch { throw; }
             return response;
         }
-        [HttpPost("Attretion Type")]
+        [HttpPost("AddAttretionType")]
         public async Task<CommonResponse> AddAttritionType(AttritionTypeReqViewModel attritionTypeReqViewModel)
         {
             CommonResponse response = new CommonResponse();
@@ -97,6 +97,19 @@ namespace WebApi.Controllers
                 response = await _iDropDownMst.AddAttritionType(attritionTypeReqViewModel.Adapt<AttritionTypeReqDTO>());
                 AttritionTypeResDTO attritionTypeResDTO = response.Data;
                 response.Data = attritionTypeResDTO.Adapt<AttritionTypeResViewModel>();
+            }
+            catch { throw; }
+            return response;
+        }
+        [HttpPost("AddLeaveStatus")]
+        public async Task<CommonResponse> AddLeaveStatus(LeaveStatusReqViewModel leaveStatusReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iDropDownMst.AddLeaveStatus(leaveStatusReqViewModel.Adapt<LeaveStatusReqDTO>());
+                LeaveStatusResDTO leaveStatusResDTO = response.Data;
+                response.Data = leaveStatusResDTO.Adapt<LeaveStatusResViewModel>();
             }
             catch { throw; }
             return response;

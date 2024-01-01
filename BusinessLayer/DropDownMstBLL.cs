@@ -261,11 +261,11 @@ namespace BusinessLayer
                 AttritionTypeMst attritionType = new AttritionTypeMst();
                 AttritionTypeResDTO attritionTypeResDTO = new AttritionTypeResDTO();
 
-                var reportingManagerDetail = await _commonRepo.AttritionTypeMstsList().FirstOrDefaultAsync(x => x.AttritionTypeName.Trim() == attritionTypeReqDTO.AttritionTypeName.Trim());
+                var attritionDetail = await _commonRepo.AttritionTypeMstsList().FirstOrDefaultAsync(x => x.AttritionTypeName.Trim() == attritionTypeReqDTO.AttritionTypeName.Trim());
 
                 if (!string.IsNullOrWhiteSpace(attritionTypeReqDTO.AttritionTypeName))
                 {
-                    if (reportingManagerDetail == null)
+                    if (attritionDetail == null)
                     {
                         attritionType.AttritionTypeName = attritionTypeReqDTO.AttritionTypeName.Trim();
                         attritionType.CreatedDate = DateTime.Now;
@@ -286,6 +286,47 @@ namespace BusinessLayer
                     {
                         response.Status = false;
                         response.Message = "Attrition Type  Name already exists";
+                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    }
+                }
+                else
+                {
+                    response.Status = false;
+                    response.Message = "data can not be null";
+                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                }
+            }
+            catch { throw; }
+            return response;
+        }
+        public async Task<CommonResponse> AddLeaveStatus(LeaveStatusReqDTO leaveStatusReqDTO)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                LeaveStatusMst leaveStatusMst  = new LeaveStatusMst();
+                LeaveStatusResDTO leaveStatusResDTO  = new LeaveStatusResDTO();
+
+                var leaveStatusDetail = await _commonRepo.LeaveStatusMstsList().FirstOrDefaultAsync(x => x.LeaveStatusName.Trim() == leaveStatusReqDTO.LeaveStatusName.Trim());
+
+                if (!string.IsNullOrWhiteSpace(leaveStatusReqDTO.LeaveStatusName))
+                {
+                    if (leaveStatusDetail == null)
+                    {
+                        leaveStatusMst.LeaveStatusName = leaveStatusReqDTO.LeaveStatusName.Trim();
+                        _dbContext.LeaveStatusMsts.Add(leaveStatusMst);
+                        _dbContext.SaveChanges();
+
+                        leaveStatusResDTO.LeaveStatusId = leaveStatusMst.LeaveStatusId;
+                        response.Data = leaveStatusResDTO;
+                        response.Status = true;
+                        response.Message = "leave Status add successfully";
+                        response.StatusCode = System.Net.HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        response.Status = false;
+                        response.Message = "leave Status  Name already exists";
                         response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                     }
                 }

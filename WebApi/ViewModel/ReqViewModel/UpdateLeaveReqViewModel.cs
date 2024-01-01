@@ -17,6 +17,6 @@ namespace WebApi.ViewModel.ReqViewModel
         public int RemainingLeaves { get; set; }
 
         public string LeaveReason { get; set; }
-        public string? LeaveStatus { get; set; }
+        //public string? LeaveStatus { get; set; }
     }
 }

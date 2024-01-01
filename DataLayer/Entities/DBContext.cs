@@ -21,11 +21,15 @@ public partial class DBContext : DbContext
 
     public virtual DbSet<DesignationMst> DesignationMsts { get; set; }
 
+    public virtual DbSet<EmployeeMst> EmployeeMsts { get; set; }
+
     public virtual DbSet<EmployeeTypeMst> EmployeeTypeMsts { get; set; }
 
     public virtual DbSet<HolidaysMst> HolidaysMsts { get; set; }
 
     public virtual DbSet<LeaveMst> LeaveMsts { get; set; }
+
+    public virtual DbSet<LeaveStatusMst> LeaveStatusMsts { get; set; }
 
     public virtual DbSet<ReportingManagerMst> ReportingManagerMsts { get; set; }
 
@@ -34,8 +38,6 @@ public partial class DBContext : DbContext
     public virtual DbSet<RoleMst> RoleMsts { get; set; }
 
     public virtual DbSet<TokenMst> TokenMsts { get; set; }
-
-    public virtual DbSet<UserMst> UserMsts { get; set; }
 
     //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //    => optionsBuilder.UseSqlServer("Server=ARCHE-ITD440\\SQLEXPRESS;Database=RS_ERP;Trusted_Connection=True;TrustServerCertificate=True;");
@@ -75,97 +77,11 @@ public partial class DBContext : DbContext
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
 
-        modelBuilder.Entity<EmployeeTypeMst>(entity =>
-        {
-            entity.HasKey(e => e.EmployeeTypeId).HasName("PK__Employee__1F1B6A94D79A4BA3");
-
-            entity.ToTable("EmployeeTypeMst");
-
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.EmployeeType).HasMaxLength(50);
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<HolidaysMst>(entity =>
-        {
-            entity.HasKey(e => e.HolidayId).HasName("PK__Holidays__2D35D57A2C0CA534");
-
-            entity.ToTable("HolidaysMst");
-
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.Date).HasColumnType("datetime");
-            entity.Property(e => e.Day).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<LeaveMst>(entity =>
-        {
-            entity.HasKey(e => e.LeaveId).HasName("PK__LeaveMst__796DB95992568AC0");
-
-            entity.ToTable("LeaveMst");
-
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.LeaveFrom).HasColumnType("datetime");
-            entity.Property(e => e.LeaveReason).HasMaxLength(100);
-            entity.Property(e => e.LeaveStatus).HasMaxLength(50);
-            entity.Property(e => e.LeaveTo).HasColumnType("datetime");
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<ReportingManagerMst>(entity =>
-        {
-            entity.HasKey(e => e.ReportingManagerId).HasName("PK__Reportin__0C57AC941D90F91B");
-
-            entity.ToTable("ReportingManagerMst");
-
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.ReportingManagerName).HasMaxLength(100);
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<ResignMst>(entity =>
-        {
-            entity.HasKey(e => e.ResignId).HasName("PK__ResignMs__4696AE4F33EB93E0");
-
-            entity.ToTable("ResignMst");
-
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.DateOfResignation).HasColumnType("datetime");
-            entity.Property(e => e.FinalDate).HasColumnType("datetime");
-            entity.Property(e => e.FinalStatus).HasMaxLength(50);
-            entity.Property(e => e.Reason).HasMaxLength(100);
-            entity.Property(e => e.Region).HasMaxLength(50);
-        });
-
-        modelBuilder.Entity<RoleMst>(entity =>
-        {
-            entity.HasKey(e => e.RoleId).HasName("PK__RoleMst__8AFACE1AF2C0FB42");
-
-            entity.ToTable("RoleMst");
-
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.RoleType).HasMaxLength(50);
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<TokenMst>(entity =>
-        {
-            entity.HasKey(e => e.TokenId).HasName("PK__TokenMst__658FEEEAF03357E4");
-
-            entity.ToTable("TokenMst");
-
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.RefreshTokenExpiryTime).HasColumnType("datetime");
-            entity.Property(e => e.TokenExpiryTime).HasColumnType("datetime");
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<UserMst>(entity =>
+        modelBuilder.Entity<EmployeeMst>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__UserMst__3214EC27024423BE");
 
-            entity.ToTable("UserMst");
+            entity.ToTable("EmployeeMst");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AadharNo).HasMaxLength(50);
@@ -215,6 +131,101 @@ public partial class DBContext : DbContext
             entity.Property(e => e.Ptamount)
                 .HasColumnType("decimal(13, 2)")
                 .HasColumnName("PTAmount");
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<EmployeeTypeMst>(entity =>
+        {
+            entity.HasKey(e => e.EmployeeTypeId).HasName("PK__Employee__1F1B6A94D79A4BA3");
+
+            entity.ToTable("EmployeeTypeMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.EmployeeType).HasMaxLength(50);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<HolidaysMst>(entity =>
+        {
+            entity.HasKey(e => e.HolidayId).HasName("PK__Holidays__2D35D57A2C0CA534");
+
+            entity.ToTable("HolidaysMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.Day).HasMaxLength(50);
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<LeaveMst>(entity =>
+        {
+            entity.HasKey(e => e.LeaveId).HasName("PK__LeaveMst__796DB95992568AC0");
+
+            entity.ToTable("LeaveMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.LeaveFrom).HasColumnType("datetime");
+            entity.Property(e => e.LeaveReason).HasMaxLength(100);
+            entity.Property(e => e.LeaveStatus).HasMaxLength(50);
+            entity.Property(e => e.LeaveTo).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<LeaveStatusMst>(entity =>
+        {
+            entity.HasKey(e => e.LeaveStatusId).HasName("PK__LeaveSta__75EE81FA547CF1E8");
+
+            entity.ToTable("LeaveStatusMst");
+
+            entity.Property(e => e.LeaveStatusName).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<ReportingManagerMst>(entity =>
+        {
+            entity.HasKey(e => e.ReportingManagerId).HasName("PK__Reportin__0C57AC941D90F91B");
+
+            entity.ToTable("ReportingManagerMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.ReportingManagerName).HasMaxLength(100);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<ResignMst>(entity =>
+        {
+            entity.HasKey(e => e.ResignId).HasName("PK__ResignMs__4696AE4F33EB93E0");
+
+            entity.ToTable("ResignMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.DateOfResignation).HasColumnType("datetime");
+            entity.Property(e => e.FinalDate).HasColumnType("datetime");
+            entity.Property(e => e.FinalStatus).HasMaxLength(50);
+            entity.Property(e => e.Reason).HasMaxLength(100);
+            entity.Property(e => e.Region).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<RoleMst>(entity =>
+        {
+            entity.HasKey(e => e.RoleId).HasName("PK__RoleMst__8AFACE1AF2C0FB42");
+
+            entity.ToTable("RoleMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.RoleType).HasMaxLength(50);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<TokenMst>(entity =>
+        {
+            entity.HasKey(e => e.TokenId).HasName("PK__TokenMst__658FEEEAF03357E4");
+
+            entity.ToTable("TokenMst");
+
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.RefreshTokenExpiryTime).HasColumnType("datetime");
+            entity.Property(e => e.TokenExpiryTime).HasColumnType("datetime");
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
         });
 

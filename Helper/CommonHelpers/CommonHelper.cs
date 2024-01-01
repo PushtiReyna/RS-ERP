@@ -25,7 +25,6 @@ namespace ServiceLayer.CommonHelpers
             CommonResponse response = new CommonResponse();
             try
             {
-
                 var resetPasswordLink = "https://localhost:7189/swagger/index.html"; /*+ id;*/
 
                 var fromEmail = new MailAddress(_configuration.GetSection("SiteEmailConfigration:FromEmail").Value);

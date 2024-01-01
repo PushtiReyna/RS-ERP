@@ -2,9 +2,9 @@
 
 Create database RS_ERP
 
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'UserMst')
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'EmployeeMst')
 BEGIN 
-	Create table dbo.UserMst(
+	Create table dbo.EmployeeMst(
 			ID int IDENTITY(1,1) Primary Key NOT NULL,
 			EmployeeID int NOT NULL,
 			Email nvarchar(50) NOT NULL,
@@ -16,14 +16,14 @@ BEGIN
 			UpdatedBy int NULL,
 			UpdatedDate DateTime NULL
 			);
-	PRINT 'UserMst Table Created' 
+	PRINT 'EmployeeMst Table Created' 
 END
 ELSE
 BEGIN 
-	PRINT 'UserMst Table Already Exist' 
+	PRINT 'EmployeeMst Table Already Exist' 
 END
 
-insert into UserMst values('11','pushti.prajapati@reynasolutions.com','abc','1','0','1','2023-20-22 15:46:41.133','0','2023-20-22 15:46:41.133');
+insert into EmployeeMst values('11','pushti.prajapati@reynasolutions.com','abc','1','0','1','2023-20-22 15:46:41.133','0','2023-20-22 15:46:41.133');
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
 			TABLE_NAME = 'TokenMst')
@@ -91,11 +91,11 @@ END
 
 --added on 22-12-2023 by PP-------------------------------------------START---------------------------------------------
 
-drop table UserMst;
+drop table EmployeeMst;
 
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'UserMst')
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'EmployeeMst')
 BEGIN 
-	Create table dbo.UserMst(
+	Create table dbo.EmployeeMst(
 			ID int IDENTITY(1,1) Primary Key NOT NULL,
 			EmployeeID int NOT NULL,
 			Image nvarchar(MAX) NULL,
@@ -146,11 +146,11 @@ BEGIN
 			UpdatedBy int NULL,
 			UpdatedDate DateTime NULL,
 	);
-	PRINT 'UserMst Table Created' 
+	PRINT 'EmployeeMst Table Created' 
 END
 ELSE
 BEGIN 
-	PRINT 'UserMst Table Already Exist' 
+	PRINT 'EmployeeMst Table Already Exist' 
 END
 
 
@@ -196,7 +196,7 @@ BEGIN
 	PRINT 'RoleMst Table Already Exist' 
 END
 
-INSERT INTO [dbo].[UserMst]
+INSERT INTO [dbo].EmployeeMst
            ([EmployeeID],[Image],[FirstName],[MiddleName],[LastName],[Email],[Gender],[DateOfBirth],[EmergencyContactName],[EmergencyContactNo],[Password],[MartialStatus],[PermanentAddress],[PermanentAddressPostalCode],[CurrentAddress],[CurrentAddressPostalCode],[EmployeeTypeId],[CompanyName],[DepartmentId],[DesignationId],[OfferDate],[ExitDate],[ComapanyAddress],[ProbationPeriod],[NoticePeriod],[RoleId],[ReportingManager],[BankName],[NameOnTheAccount],[AccountNo],[BankBranch],[BankIfsc],[PFAccountNo],
 		   [AadharNo],[PANNO],[MonthlySalary] ,[PFAmount],[ESIAmount],[PTAmount],[PF_Applicable],[PT_Applicable] ,[ESI_Applicable] ,[IsActive],[IsDelete],[CreatedBy],[CreatedDate] ,[UpdatedBy],[UpdatedDate])
      VALUES
@@ -277,27 +277,27 @@ END
 
 
 
-IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.UserMst') AND name = 'ContactNumber')
+IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.EmployeeMst') AND name = 'ContactNumber')
 BEGIN
-	ALTER TABLE UserMst add ContactNumber nvarchar(50) NULL;
+	ALTER TABLE EmployeeMst add ContactNumber nvarchar(50) NULL;
 END
 ELSE
 BEGIN
 	PRINT 'ContactNumber Column Already Exist' 
 END
 
-IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.UserMst') AND name = 'EmployeeStatus')
+IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.EmployeeMst') AND name = 'EmployeeStatus')
 BEGIN
-	  ALTER TABLE UserMst add EmployeeStatus bit NULL;
+	  ALTER TABLE EmployeeMst add EmployeeStatus bit NULL;
 END
 ELSE
 BEGIN
 	PRINT 'EmployeeStatus Column Already Exist' 
 END
 
-IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.UserMst') AND name = 'JoiningDate')
+IF NOT EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.EmployeeMst') AND name = 'JoiningDate')
 BEGIN
-	   ALTER TABLE UserMst add JoiningDate datetime NULL;
+	   ALTER TABLE EmployeeMst add JoiningDate datetime NULL;
 END
 ELSE
 BEGIN
@@ -369,3 +369,23 @@ END
 
 --added on 28-12-2023 by PP-------------------------------------------END-----------------------------------------------
 --executed on local by PP on 28-12-2023---------------------------------------------------------------------------------
+
+--added on 01-01-2024 by PP-------------------------------------------START---------------------------------------------
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
+			TABLE_NAME = 'LeaveStatusMst')
+BEGIN 
+	Create table dbo.LeaveStatusMst(
+			LeaveStatusId int IDENTITY(1,1) Primary Key NOT NULL,
+			LeaveStatusName nvarchar(100) not null,
+			);
+	PRINT 'LeaveStatusMst Table Created' 
+END
+ELSE
+BEGIN 
+	PRINT 'LeaveStatusMst Table Already Exist' 
+END
+
+--added on 01-01-2024 by PP-------------------------------------------END-----------------------------------------------
+--executed on local by PP on 01-01-2024---------------------------------------------------------------------------------

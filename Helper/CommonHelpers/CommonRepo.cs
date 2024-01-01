@@ -15,9 +15,9 @@ namespace ServiceLayer.CommonHelpers
         {
             _dbContext = dbContext;
         }
-        public IQueryable<UserMst> UserMstList(bool isActive = true, bool isDelete = false)
+        public IQueryable<EmployeeMst> EmployeeMstList(bool isActive = true, bool isDelete = false)
         {
-            return _dbContext.UserMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
+            return _dbContext.EmployeeMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
         }
         public IQueryable<DepartmentMst> DepartmentMstList(bool isActive = true, bool isDelete = false)
         {
@@ -50,6 +50,10 @@ namespace ServiceLayer.CommonHelpers
         public IQueryable<LeaveMst> LeaveMstsList(bool isActive = true, bool isDelete = false)
         {
             return _dbContext.LeaveMsts.Where(x => x.IsActive == isActive && x.IsDelete == isDelete).AsQueryable();
+        }
+        public IQueryable<LeaveStatusMst> LeaveStatusMstsList()
+        {
+            return _dbContext.LeaveStatusMsts.AsQueryable();
         }
         public IQueryable<ResignMst> ResignMstsList()
         {

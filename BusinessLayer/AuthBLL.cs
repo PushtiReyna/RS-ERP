@@ -48,24 +48,24 @@ namespace BusinessLayer
             try
             {
                 ChangePasswordResDTO changePasswordResDTO = new ChangePasswordResDTO();
-                var userDetail = await  _commonRepo.UserMstList().FirstOrDefaultAsync(x => x.EmployeeId == changePasswordReqDTO.EmployeeId);
-                if (userDetail != null)
+                var employeeDetail = await  _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == changePasswordReqDTO.EmployeeId);
+                if (employeeDetail != null)
                 {
-                    if (userDetail.Password.Trim() == changePasswordReqDTO.Password.Trim())
+                    if (employeeDetail.Password.Trim() == changePasswordReqDTO.Password.Trim())
                     {
-                        userDetail.Password = changePasswordReqDTO.NewPassword.Trim();
-                        userDetail.UpdatedDate = DateTime.Now;
-                        userDetail.UpdatedBy = 1;
-                        _dbContext.Entry(userDetail).State = EntityState.Modified;
+                        employeeDetail.Password = changePasswordReqDTO.NewPassword.Trim();
+                        employeeDetail.UpdatedDate = DateTime.Now;
+                        employeeDetail.UpdatedBy = 1;
+                        _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();
 
-                        changePasswordResDTO.EmployeeId = userDetail.EmployeeId;
+                        changePasswordResDTO.EmployeeId = employeeDetail.EmployeeId;
                         response.Data = changePasswordResDTO;
                         response.Message = "changepassword successfully";
                         response.Status = true;
                         response.StatusCode = System.Net.HttpStatusCode.OK;
                     }
-                    else if (userDetail.Password.Trim() == changePasswordReqDTO.NewPassword.Trim())
+                    else if (employeeDetail.Password.Trim() == changePasswordReqDTO.NewPassword.Trim())
                     {
                         response.Message = " password is already exists";
                         response.StatusCode = System.Net.HttpStatusCode.BadRequest;
@@ -93,16 +93,16 @@ namespace BusinessLayer
             try
             {
                 ResetPasswordResDTO resetPasswordResDTO = new ResetPasswordResDTO();
-                var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.EmployeeId == resetPasswordReqDTO.EmployeeId);
-                if (userDetail != null)
+                var employeeDetail = _commonRepo.EmployeeMstList().FirstOrDefault(x => x.EmployeeId == resetPasswordReqDTO.EmployeeId);
+                if (employeeDetail != null)
                 {
-                    userDetail.Password = resetPasswordReqDTO.NewPassword.Trim();
-                    userDetail.UpdatedDate = DateTime.Now;
-                    userDetail.UpdatedBy = 1;
-                    _dbContext.Entry(userDetail).State = EntityState.Modified;
+                    employeeDetail.Password = resetPasswordReqDTO.NewPassword.Trim();
+                    employeeDetail.UpdatedDate = DateTime.Now;
+                    employeeDetail.UpdatedBy = 1;
+                    _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
 
-                    resetPasswordResDTO.EmployeeId = userDetail.EmployeeId;
+                    resetPasswordResDTO.EmployeeId = employeeDetail.EmployeeId;
                     response.Data = resetPasswordResDTO;
                     response.Message = "reset password successfully";
                     response.Status = true;
@@ -122,10 +122,10 @@ namespace BusinessLayer
             CommonResponse response = new CommonResponse();
             try
             {
-                var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.Email == forgotPasswordReqDTO.Email);
-                if(userDetail != null)
+                var employeeDetail = _commonRepo.EmployeeMstList().FirstOrDefault(x => x.Email == forgotPasswordReqDTO.Email);
+                if(employeeDetail != null)
                 {
-                    await _commonHelper.SendLinkEmail(forgotPasswordReqDTO.Email, userDetail.EmployeeId);
+                    await _commonHelper.SendLinkEmail(forgotPasswordReqDTO.Email, employeeDetail.EmployeeId);
                     response.Message = "reset password link send";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;

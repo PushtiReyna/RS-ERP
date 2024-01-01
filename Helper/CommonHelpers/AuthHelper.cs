@@ -39,7 +39,7 @@ namespace ServiceLayer.CommonHelpers
                 LoginResDTO loginResDTO = new LoginResDTO();
                 TokenMst tokenMst = new TokenMst();
 
-                var userDetail = await _commonRepo.UserMstList().FirstOrDefaultAsync(x => x.Email == loginReqDTO.Email.Trim() && loginReqDTO.Password != null && x.Password == loginReqDTO.Password.Trim());
+                var userDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.Email == loginReqDTO.Email.Trim() && loginReqDTO.Password != null && x.Password == loginReqDTO.Password.Trim());
                 if (userDetail != null)
                 {
                     var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JsonWebTokenKeys:IssuerSigningKey"]));
@@ -125,7 +125,7 @@ namespace ServiceLayer.CommonHelpers
 
                 if (tokenDetail != null)
                 {
-                    var userDetail = _commonRepo.UserMstList().FirstOrDefault(x => x.EmployeeId == tokenDetail.EmployeeId);
+                    var userDetail = _commonRepo.EmployeeMstList().FirstOrDefault(x => x.EmployeeId == tokenDetail.EmployeeId);
                     if (userDetail != null)
                     {
                         string Token = tokenReqDTO.Token.Trim();

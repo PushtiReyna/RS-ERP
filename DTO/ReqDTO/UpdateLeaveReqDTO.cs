@@ -19,6 +19,6 @@ namespace DTO.ReqDTO
         public int RemainingLeaves { get; set; }
 
         public string LeaveReason { get; set; }
-        public string? LeaveStatus { get; set; }
+        //public string? LeaveStatus { get; set; }
     }
 }

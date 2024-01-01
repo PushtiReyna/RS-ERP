@@ -21,7 +21,7 @@ namespace WebApi.Controllers
             _iHoliday = iHoliday;
         }
 
-        [HttpGet("Get HolidayList")]
+        [HttpGet("GetHolidayList")]
         public async Task<CommonResponse> GetHolidayList()
         {
             CommonResponse response = new CommonResponse();
@@ -35,7 +35,7 @@ namespace WebApi.Controllers
             return response;
         }
 
-        [HttpPost("Add Holiday")]
+        [HttpPost("AddHoliday")]
         public async Task<CommonResponse> AddHoliday(AddHolidayReqViewModel addHolidayReqViewModel)
         {
             CommonResponse response = new CommonResponse();
@@ -49,7 +49,7 @@ namespace WebApi.Controllers
             return response;
         }
 
-        [HttpPut("Update Holiday")]
+        [HttpPut("UpdateHoliday")]
         public async Task<CommonResponse> UpdateHoliday(UpdateHolidayReqViewModel updateHolidayReqViewModel)
         {
             CommonResponse response = new CommonResponse();
@@ -63,7 +63,7 @@ namespace WebApi.Controllers
             return response;
         }
 
-        [HttpDelete("Delete Holiday")]
+        [HttpDelete("DeleteHoliday")]
         public async Task<CommonResponse> DeleteHoliday(DeleteHolidayReqViewModel deleteHolidayReqViewModel)
         {
             CommonResponse response = new CommonResponse();

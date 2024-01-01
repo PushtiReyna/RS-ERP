@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.CommonModels
 {
+    public enum AttendanceList
+    {
+        Present = 1,
+        Absent = 2,
+        HalfDay = 3
+    }
+
     public class CommonResponse
     {
         public bool Status { get; set; } = false;
