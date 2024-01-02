@@ -101,6 +101,7 @@ namespace WebApi.Controllers
             catch { throw; }
             return response;
         }
+
         [HttpPost("AddLeaveStatus")]
         public async Task<CommonResponse> AddLeaveStatus(LeaveStatusReqViewModel leaveStatusReqViewModel)
         {
@@ -110,6 +111,20 @@ namespace WebApi.Controllers
                 response = await _iDropDownMst.AddLeaveStatus(leaveStatusReqViewModel.Adapt<LeaveStatusReqDTO>());
                 LeaveStatusResDTO leaveStatusResDTO = response.Data;
                 response.Data = leaveStatusResDTO.Adapt<LeaveStatusResViewModel>();
+            }
+            catch { throw; }
+            return response;
+        }
+
+        [HttpPost("AddAttendanceType")]
+        public async Task<CommonResponse> AddAttendanceType(AttendanceTypeReqViewModel attendanceTypeReqView)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iDropDownMst.AddAttendanceType(attendanceTypeReqView.Adapt<AttendanceTypeReqDTO>());
+                AttendanceTypeResDTO attendanceTypeResDTO = response.Data;
+                response.Data = attendanceTypeResDTO.Adapt<AttendanceTypeResViewModel>();
             }
             catch { throw; }
             return response;

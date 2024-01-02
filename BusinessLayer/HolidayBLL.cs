@@ -28,20 +28,17 @@ namespace BusinessLayer
             CommonResponse response = new CommonResponse();
             try
             {
-               
                 List<GetHolidayResDTO> lstGetHolidayResDTO = _commonRepo.HolidayMstsList().ToList().Adapt<List<GetHolidayResDTO>>();
-
                 if (lstGetHolidayResDTO.Count > 0)
-                {
-                   
+                {                   
                     response.Data = lstGetHolidayResDTO;
-                    response.Message = "Holiday list data are found";
+                    response.Message = "data found successfully!";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
                 }
                 else
                 {
-                    response.Message = "Holiday list  data not found";
+                    response.Message = "data not found";
                     response.Status = false;
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 }
@@ -79,7 +76,6 @@ namespace BusinessLayer
                         response.Status = true;
                         response.Message = "Holiday Name added successfully";
                         response.StatusCode = System.Net.HttpStatusCode.OK;
-
                     }
                     else
                     {

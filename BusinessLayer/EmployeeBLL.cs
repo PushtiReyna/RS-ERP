@@ -38,25 +38,25 @@ namespace BusinessLayer
 
                 List<EmployeeeList> lstEmployeeeList = new List<EmployeeeList>();
                 lstEmployeeeList = (from employeeDetail in _commonRepo.EmployeeMstList().Where(x => x.EmployeeStatus == true)
-                                                               join roleDetail in _commonRepo.RoleMstList()
-                                                                      on employeeDetail.RoleId equals roleDetail.RoleId
-                                                               select new EmployeeeList
-                                                               {
-                                                                   EmployeeId = employeeDetail.EmployeeId,
-                                                                   Email = employeeDetail.Email,
-                                                                   ContactNumber = employeeDetail.ContactNumber,
-                                                                   RoleType = roleDetail.RoleType,
-                                                                   EmployeeStatus = employeeDetail.EmployeeStatus,
-                                                                   JoiningDate = employeeDetail.JoiningDate,
-                                                                   Image = employeeDetail.Image,
-                                                                   FullName = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName
-                                                               }).ToList()/*.Adapt<List<GetUserResDTO>>()*/;
+                                    join roleDetail in _commonRepo.RoleMstList()
+                                           on employeeDetail.RoleId equals roleDetail.RoleId
+                                    select new EmployeeeList
+                                    {
+                                        EmployeeId = employeeDetail.EmployeeId,
+                                        Email = employeeDetail.Email,
+                                        ContactNumber = employeeDetail.ContactNumber,
+                                        RoleType = roleDetail.RoleType,
+                                        EmployeeStatus = employeeDetail.EmployeeStatus,
+                                        JoiningDate = employeeDetail.JoiningDate,
+                                        Image = employeeDetail.Image,
+                                        FullName = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName
+                                    }).ToList()/*.Adapt<List<GetUserResDTO>>()*/;
 
                 getEmployeeResDTO.TotalCount = lstEmployeeeList.Count;
                 getEmployeeResDTO.EmployeeeLists = lstEmployeeeList.OrderBy(x => x.EmployeeId)
                                                                   .Skip((getEmployeeReqDTO.Page - 1) * getEmployeeReqDTO.ItemsPerPage)
                                                                   .Take(getEmployeeReqDTO.ItemsPerPage).ToList();
-             
+
                 if (lstEmployeeeList.Count > 0)
                 {
                     response.Data = getEmployeeResDTO;
@@ -80,7 +80,7 @@ namespace BusinessLayer
             CommonResponse response = new CommonResponse();
             try
             {
-               GetEmployeeByNameResDTO getEmployeeByNameResDTO = new GetEmployeeByNameResDTO();
+                GetEmployeeByNameResDTO getEmployeeByNameResDTO = new GetEmployeeByNameResDTO();
 
 
                 List<GetEmployeeByNameResDTO> lstGetEmployeeByNameResDTO = (from employeeDetail in _commonRepo.EmployeeMstList().Where(x => x.FirstName == getEmployeeByNameReqDTO.FirstName)
@@ -123,7 +123,7 @@ namespace BusinessLayer
             {
                 List<GetEmployeeByIdPersonalInformationResDTO> lstGetEmployeeByIdPersonalInformationResDTO = _commonRepo.EmployeeMstList().Where(x => x.EmployeeId == getEmployeeByIdPersonalInformationReqDTO.EmployeeId).ToList().Adapt<List<GetEmployeeByIdPersonalInformationResDTO>>();
 
-                if(lstGetEmployeeByIdPersonalInformationResDTO.Count > 0)
+                if (lstGetEmployeeByIdPersonalInformationResDTO.Count > 0)
                 {
                     response.Data = lstGetEmployeeByIdPersonalInformationResDTO;
                     response.Message = "Employee personal information data are found";
@@ -203,10 +203,22 @@ namespace BusinessLayer
                 AddEmployeePersonalInformationResDTO addEmployeePersonalInformationResDTO = new AddEmployeePersonalInformationResDTO();
 
                 var employeeDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == addEmployeePersonalInformationReqDTO.EmployeeId || x.Email == addEmployeePersonalInformationReqDTO.Email);
+
                 if (employeeDetail == null)
                 {
-                    employeeMst.EmployeeId = addEmployeePersonalInformationReqDTO.EmployeeId;
-                    if(addEmployeePersonalInformationReqDTO.Image != null)
+                    if (_dbContext.EmployeeMsts.FirstOrDefault(x => x.EmployeeId == addEmployeePersonalInformationReqDTO.EmployeeId && (x.IsDelete == true || x.IsActive == true)) == null)
+                    {
+                        employeeMst.EmployeeId = addEmployeePersonalInformationReqDTO.EmployeeId;
+                    }
+                    else
+                    {
+                        response.Message = "Employee Id Already exists";
+                        response.Status = false;
+                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                        return response;
+                    }
+                       
+                    if (addEmployeePersonalInformationReqDTO.Image != null)
                     {
                         string imgName = uploadUserImage(addEmployeePersonalInformationReqDTO.Image);
                         employeeMst.Image = imgName;
@@ -215,6 +227,7 @@ namespace BusinessLayer
                     {
                         employeeMst.Image = addEmployeePersonalInformationReqDTO.Image;
                     }
+
                     employeeMst.FirstName = addEmployeePersonalInformationReqDTO.FirstName;
                     employeeMst.MiddleName = addEmployeePersonalInformationReqDTO.MiddleName;
                     employeeMst.LastName = addEmployeePersonalInformationReqDTO.LastName;
@@ -251,7 +264,6 @@ namespace BusinessLayer
                     response.Message = "Employee already exists";
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 }
-
             }
             catch { throw; }
             return response;

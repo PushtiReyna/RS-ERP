@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "NofmpDUgxMOVovJy7JUEwIiZZUygIEwA8e+KeRSuxzw=",
+  "Hash": "UkhDWdA79DykpFjfkC3rdER9rBcwNDL9xSJu6qs2Hfk=",
   "Source": "WebApi",
   "BasePath": "_content/WebApi",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Images\\demo.jpg"
+    },
+    {
+      "Identity": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\icon.ico",
+      "SourceId": "WebApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\",
+      "BasePath": "_content/WebApi",
+      "RelativePath": "Images/icon.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Images\\icon.ico"
     }
   ]
 }

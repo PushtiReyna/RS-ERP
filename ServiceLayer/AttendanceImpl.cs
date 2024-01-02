@@ -1,4 +1,6 @@
 ﻿using BusinessLayer;
+using DTO.ReqDTO;
+using DTO.ResDTO;
 using ServiceLayer.CommonModels;
 using System;
 using System.Collections.Generic;
@@ -16,11 +18,17 @@ namespace ServiceLayer
             _attendanceBLL = attendanceBLL;
         }
 
-        public async Task<CommonResponse> GetAttendanceList() => await _attendanceBLL.GetAttendanceList();
+        public async Task<CommonResponse> GetAttendanceTypeList() => await _attendanceBLL.GetAttendanceTypeList();
+        public async Task<CommonResponse> AddAttendance(AddAttendanceReqDTO addAttendanceReqDTO) => await _attendanceBLL.AddAttendance(addAttendanceReqDTO);
+        public async Task<CommonResponse> GetAttendanceListByMonth(GetAttendanceListByMonthReqDTO getAttendanceListByMonthReqDTO) => await _attendanceBLL.GetAttendanceListByMonth(getAttendanceListByMonthReqDTO);
+        public async Task<CommonResponse> UpdateAttendance(UpdateAttendanceReqDTO updateAttendanceReqDTO) => await _attendanceBLL.UpdateAttendance(updateAttendanceReqDTO);
     }
 
     public interface IAttendance
     {
-        public Task<CommonResponse> GetAttendanceList();
+        public Task<CommonResponse> GetAttendanceTypeList();
+        public Task<CommonResponse> AddAttendance(AddAttendanceReqDTO addAttendanceReqDTO);
+        public Task<CommonResponse> GetAttendanceListByMonth(GetAttendanceListByMonthReqDTO getAttendanceListByMonthReqDTO);
+        public Task<CommonResponse> UpdateAttendance(UpdateAttendanceReqDTO updateAttendanceReqDTO);
     }
 }

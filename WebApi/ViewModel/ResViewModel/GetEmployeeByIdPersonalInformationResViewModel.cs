@@ -4,7 +4,7 @@
     {
         public int EmployeeId { get; set; }
 
-        public dynamic Image { get; set; }
+        public string? Image { get; set; }
 
         public string? FirstName { get; set; }
 

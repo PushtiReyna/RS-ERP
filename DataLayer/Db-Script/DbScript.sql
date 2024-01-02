@@ -389,3 +389,49 @@ END
 
 --added on 01-01-2024 by PP-------------------------------------------END-----------------------------------------------
 --executed on local by PP on 01-01-2024---------------------------------------------------------------------------------
+
+
+--added on 02-01-2024 by PP-------------------------------------------START---------------------------------------------
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
+			TABLE_NAME = 'AttendanceTypeMst')
+BEGIN 
+	Create table dbo.AttendanceTypeMst(
+			AttendanceTypeId int IDENTITY(1,1) Primary Key NOT NULL,
+			AttendanceTypeName nvarchar(100) not null,
+			);
+	PRINT 'AttendanceTypeMst Table Created' 
+END
+ELSE
+BEGIN 
+	PRINT 'AttendanceTypeMst Table Already Exist' 
+END
+
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  
+			TABLE_NAME = 'AttendanceMst')
+BEGIN 
+	Create table dbo.AttendanceMst(
+			AttendanceId int IDENTITY(1,1) Primary Key NOT NULL,
+			EmployeeId int NOT NULL,
+			AttendanceTypeName nvarchar(100) not null,
+			Date datetime Not Null,
+			Month int Not Null,
+			Year int Not Null,
+			DayNoOfMonth nvarchar(30) NOT NULL,
+			IsActive bit  NULL,
+			IsDelete bit NULL,
+			CreatedBy int  NULL,
+			CreatedDate DateTime  NULL,
+			UpdatedBy int NULL,
+			UpdatedDate DateTime NULL
+			);
+	PRINT 'AttendanceMst Table Created' 
+END
+ELSE
+BEGIN 
+	PRINT 'AttendanceMst Table Already Exist' 
+END
+
+--added on 02-01-2024 by PP-------------------------------------------END-----------------------------------------------
+--executed on local by PP on 02-01-2024---------------------------------------------------------------------------------

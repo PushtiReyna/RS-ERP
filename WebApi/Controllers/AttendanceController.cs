@@ -20,18 +20,61 @@ namespace WebApi.Controllers
             _iAttendance = iAttendance;
         }
 
-        [HttpGet("GetAttendanceList")]
-        public async Task<CommonResponse> GetAttendanceList()
+        [HttpGet("GetAttendanceTypeList")]
+        public async Task<CommonResponse> GetAttendanceTypeList()
         {
             CommonResponse response = new CommonResponse();
             try
             {
-                response = await _iAttendance.GetAttendanceList();
-               List<GetAttendanceListResDTO> lstGetLeaveResDTO = response.Data;
-                response.Data = lstGetLeaveResDTO.Adapt<List <GetAttendanceListResViewModel>>();
+                response = await _iAttendance.GetAttendanceTypeList();
+                List<GetAttendanceTypeListResDTO> lstGetAttendanceTypeResDTO = response.Data;
+                response.Data = lstGetAttendanceTypeResDTO.Adapt<List<GetAttendanceTypeListResViewModel>>();
             }
             catch { throw; }
             return response;
         }
+
+        [HttpPost("GetAttendanceListByMonth")]
+        public async Task<CommonResponse> GetAttendanceListByMonth(GetAttendanceListByMonthReqViewModel getAttendanceListByMonthReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iAttendance.GetAttendanceListByMonth(getAttendanceListByMonthReqViewModel.Adapt<GetAttendanceListByMonthReqDTO>());
+                List<GetAttendanceListByMonthResDTO> lstGetAttendanceListByMonthResDTO = response.Data;
+                response.Data = lstGetAttendanceListByMonthResDTO.Adapt<List<GetAttendanceListByMonthResViewModel>>();
+            }
+            catch { throw; }
+            return response;
+        }
+
+        [HttpPost("AddAttendance")]
+        public async Task<CommonResponse> AddAttendance(AddAttendanceReqViewModel addAttendanceReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iAttendance.AddAttendance(addAttendanceReqViewModel.Adapt<AddAttendanceReqDTO>());
+                AddAttendanceResDTO addAttendanceResDTO = response.Data;
+                response.Data = addAttendanceResDTO.Adapt<AddAttendanceResViewModel>();
+            }
+            catch { throw; }
+            return response;
+        }
+
+        [HttpPut("UpdateAttendance")]
+        public async Task<CommonResponse> UpdateAttendance(UpdateAttendanceReqViewModel addAttendanceReqViewModel)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                response = await _iAttendance.UpdateAttendance(addAttendanceReqViewModel.Adapt<UpdateAttendanceReqDTO>());
+                UpdateAttendanceResDTO addAttendanceResDTO = response.Data;
+                response.Data = addAttendanceResDTO.Adapt<UpdateAttendanceResViewModel>();
+            }
+            catch { throw; }
+            return response;
+        }
+
     }
 }

@@ -48,7 +48,7 @@ namespace BusinessLayer
             try
             {
                 ChangePasswordResDTO changePasswordResDTO = new ChangePasswordResDTO();
-                var employeeDetail = await  _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == changePasswordReqDTO.EmployeeId);
+                var employeeDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == changePasswordReqDTO.EmployeeId);
                 if (employeeDetail != null)
                 {
                     if (employeeDetail.Password.Trim() == changePasswordReqDTO.Password.Trim())
@@ -61,13 +61,13 @@ namespace BusinessLayer
 
                         changePasswordResDTO.EmployeeId = employeeDetail.EmployeeId;
                         response.Data = changePasswordResDTO;
-                        response.Message = "changepassword successfully";
+                        response.Message = "changepassword successfully!";
                         response.Status = true;
                         response.StatusCode = System.Net.HttpStatusCode.OK;
                     }
                     else if (employeeDetail.Password.Trim() == changePasswordReqDTO.NewPassword.Trim())
                     {
-                        response.Message = " password is already exists";
+                        response.Message = "password is already exists";
                         response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                         return response;
                     }
@@ -104,7 +104,7 @@ namespace BusinessLayer
 
                     resetPasswordResDTO.EmployeeId = employeeDetail.EmployeeId;
                     response.Data = resetPasswordResDTO;
-                    response.Message = "reset password successfully";
+                    response.Message = "reset password successfully!";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
                 }
@@ -126,7 +126,7 @@ namespace BusinessLayer
                 if(employeeDetail != null)
                 {
                     await _commonHelper.SendLinkEmail(forgotPasswordReqDTO.Email, employeeDetail.EmployeeId);
-                    response.Message = "reset password link send";
+                    response.Message = "reset password link send!";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
                 }

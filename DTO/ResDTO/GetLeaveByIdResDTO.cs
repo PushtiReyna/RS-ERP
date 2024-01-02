@@ -8,7 +8,7 @@ namespace DTO.ResDTO
 {
     public class GetLeaveByIdResDTO
     {
-        public string Image { get; set; }
+        public string? Image { get; set; }
 
         public string FullName { get; set; }
 

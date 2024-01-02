@@ -227,7 +227,6 @@ namespace BusinessLayer
                         response.Status = true;
                         response.Message = "leave updated successfully";
                         response.StatusCode = System.Net.HttpStatusCode.OK;
-
                     }
                     else
                     {
@@ -301,7 +300,7 @@ namespace BusinessLayer
 
                     updateLeaveStatusResDTO.LeaveId = leaveDetail.LeaveId;
                     response.Data = updateLeaveStatusResDTO;
-                    response.Message = "Leave status updated successfully";
+                    response.Message = "Leave status updated successfully!";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
                 }

@@ -187,7 +187,7 @@ namespace BusinessLayer
                         roleResDTO.RoleType = roleMst.RoleType;
                         response.Data = roleResDTO;
                         response.Status = true;
-                        response.Message = "Role Type add successfully";
+                        response.Message = "Role Type add successfully!";
                         response.StatusCode = System.Net.HttpStatusCode.OK;
                     }
                     else
@@ -320,13 +320,54 @@ namespace BusinessLayer
                         leaveStatusResDTO.LeaveStatusId = leaveStatusMst.LeaveStatusId;
                         response.Data = leaveStatusResDTO;
                         response.Status = true;
-                        response.Message = "leave Status add successfully";
+                        response.Message = "leave Status add successfully!";
                         response.StatusCode = System.Net.HttpStatusCode.OK;
                     }
                     else
                     {
                         response.Status = false;
-                        response.Message = "leave Status  Name already exists";
+                        response.Message = "leave Status Name already exists";
+                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    }
+                }
+                else
+                {
+                    response.Status = false;
+                    response.Message = "data can not be null";
+                    response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                }
+            }
+            catch { throw; }
+            return response;
+        }
+        public async Task<CommonResponse> AddAttendanceType(AttendanceTypeReqDTO attendanceTypeReqDTO)
+        {
+            CommonResponse response = new CommonResponse();
+            try
+            {
+                AttendanceTypeMst attendanceTypeMst = new AttendanceTypeMst();
+                AttendanceTypeResDTO attendanceTypeResDTO = new AttendanceTypeResDTO();
+
+                var attendanceTypeDetail = await _commonRepo.AttendanceTypeMstsList().FirstOrDefaultAsync(x => x.AttendanceTypeName.Trim() == attendanceTypeReqDTO.AttendanceTypeName.Trim());
+
+                if (!string.IsNullOrWhiteSpace(attendanceTypeReqDTO.AttendanceTypeName))
+                {
+                    if (attendanceTypeDetail == null)
+                    {
+                        attendanceTypeMst.AttendanceTypeName = attendanceTypeReqDTO.AttendanceTypeName.Trim();
+                        _dbContext.AttendanceTypeMsts.Add(attendanceTypeMst);
+                        _dbContext.SaveChanges();
+
+                        attendanceTypeResDTO.AttendanceTypeId = attendanceTypeMst.AttendanceTypeId;
+                        response.Data = attendanceTypeResDTO;
+                        response.Status = true;
+                        response.Message = "Attendance type add successfully";
+                        response.StatusCode = System.Net.HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        response.Status = false;
+                        response.Message = "Attendance type Name already exists";
                         response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                     }
                 }

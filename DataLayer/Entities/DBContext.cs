@@ -15,6 +15,10 @@ public partial class DBContext : DbContext
     {
     }
 
+    public virtual DbSet<AttendanceMst> AttendanceMsts { get; set; }
+
+    public virtual DbSet<AttendanceTypeMst> AttendanceTypeMsts { get; set; }
+
     public virtual DbSet<AttritionTypeMst> AttritionTypeMsts { get; set; }
 
     public virtual DbSet<DepartmentMst> DepartmentMsts { get; set; }
@@ -44,6 +48,28 @@ public partial class DBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AttendanceMst>(entity =>
+        {
+            entity.HasKey(e => e.AttendanceId).HasName("PK__Attendan__8B69261C672814E0");
+
+            entity.ToTable("AttendanceMst");
+
+            entity.Property(e => e.AttendanceTypeName).HasMaxLength(100);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.Date).HasColumnType("datetime");
+            entity.Property(e => e.DayNoOfMonth).HasMaxLength(30);
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<AttendanceTypeMst>(entity =>
+        {
+            entity.HasKey(e => e.AttendanceTypeId).HasName("PK__Attendan__F843372C72E9E7AB");
+
+            entity.ToTable("AttendanceTypeMst");
+
+            entity.Property(e => e.AttendanceTypeName).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<AttritionTypeMst>(entity =>
         {
             entity.HasKey(e => e.AttritionTypeId).HasName("PK__Attritio__696BE7ECBB7F1E79");

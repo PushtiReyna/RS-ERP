@@ -25,6 +25,7 @@ namespace ServiceLayer
         public async Task<CommonResponse> AddReportingManager(ReportingManagerReqDTO reportingManagerReqDTO) => await _dropDownMstBLL.AddReportingManager(reportingManagerReqDTO);
         public async Task<CommonResponse> AddAttritionType(AttritionTypeReqDTO attritionTypeReqDTO) => await _dropDownMstBLL.AddAttritionType(attritionTypeReqDTO);
         public async Task<CommonResponse> AddLeaveStatus(LeaveStatusReqDTO leaveStatusReqDTO) => await _dropDownMstBLL.AddLeaveStatus(leaveStatusReqDTO);
+        public async Task<CommonResponse> AddAttendanceType(AttendanceTypeReqDTO attendanceTypeReqDTO) => await _dropDownMstBLL.AddAttendanceType(attendanceTypeReqDTO);
     }
 
     public interface IDropDownMst
@@ -36,5 +37,6 @@ namespace ServiceLayer
         public Task<CommonResponse> AddReportingManager(ReportingManagerReqDTO reportingManagerReqDTO);
         public Task<CommonResponse> AddAttritionType(AttritionTypeReqDTO attritionTypeReqDTO);
         public Task<CommonResponse> AddLeaveStatus(LeaveStatusReqDTO leaveStatusReqDTO);
+        public Task<CommonResponse> AddAttendanceType(AttendanceTypeReqDTO attendanceTypeReqDTO); 
     }
 }
