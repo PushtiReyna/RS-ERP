@@ -21,15 +21,15 @@ namespace WebApi.Controllers
             _iHoliday = iHoliday;
         }
 
-        [HttpGet("GetHolidayList")]
-        public async Task<CommonResponse> GetHolidayList()
+        [HttpPost("GetHolidayList")]
+        public async Task<CommonResponse> GetHolidayList(GetHolidayListReqViewModel getHolidayListReqViewModel)
         {
             CommonResponse response = new CommonResponse();
             try
             {
-                response = await _iHoliday.GetHolidayList();
-                List<GetHolidayResDTO> lstGetHolidayResDTO = response.Data;
-                response.Data = lstGetHolidayResDTO.Adapt<List<GetHolidayResViewModel>>();
+                response = await _iHoliday.GetHolidayList(getHolidayListReqViewModel.Adapt<GetHolidayListReqDTO>());
+                GetHolidayListResDTO lstGetHolidayResDTO = response.Data;
+                response.Data = lstGetHolidayResDTO.Adapt<GetHolidayListResViewModel>();
             }
             catch { throw; }
             return response;

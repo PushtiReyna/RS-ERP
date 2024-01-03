@@ -17,10 +17,13 @@ namespace BusinessLayer
     {
         private readonly DBContext _dbContext;
         private readonly CommonRepo _commonRepo;
-        public LeaveBLL(DBContext dbContext, CommonRepo commonRepo)
+        private readonly CommonHelper _commonHelper;
+
+        public LeaveBLL(DBContext dbContext, CommonRepo commonRepo, CommonHelper commonHelper)
         {
             _dbContext = dbContext;
             _commonRepo = commonRepo;
+            _commonHelper = commonHelper;
         }
 
         public async Task<CommonResponse> GetLeaveById(GetLeaveByIdReqDTO getLeaveByIdReqDTO)
@@ -75,41 +78,41 @@ namespace BusinessLayer
             CommonResponse response = new CommonResponse();
             try
             {
-                LeaveList leaveList = new LeaveList();
-                List<LeaveList> lstLeaveList = new List<LeaveList>();
                 GetLeaveResDTO getLeaveResDTO = new GetLeaveResDTO();
 
-                foreach (LeaveMst leaveMst in _commonRepo.LeaveMstsList().ToList())
-                {
-                    leaveList = new LeaveList();
-                    var employeeDetail = _commonRepo.EmployeeMstList().FirstOrDefault(x => x.EmployeeId == leaveMst.EmployeeId);
+                List<LeaveList> lstLeaveList = new List<LeaveList>();
 
-                    if (employeeDetail != null)
-                    {
-                        leaveList.FullName = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName;
-                        leaveList.Image = employeeDetail.Image;
-                        leaveList.Email = employeeDetail.Email;
-                        leaveList.LeaveFrom = leaveMst.LeaveFrom;
-                        leaveList.LeaveTo = leaveMst.LeaveTo;
-                        leaveList.NumberOfDays = leaveMst.NumberOfDays;
-                        leaveList.LeaveReason = leaveMst.LeaveReason;
-                        leaveList.LeaveStatus = leaveMst.LeaveStatus;
+                lstLeaveList = await (from leaveDetail in _commonRepo.LeaveMstsList()
+                                      join employeeDetail in _commonRepo.EmployeeMstList()
+                                          on leaveDetail.EmployeeId equals employeeDetail.EmployeeId
+                                      select new LeaveList
+                                      {
+                                          FullName = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName,
+                                          Image = employeeDetail.Image,
+                                          Email = employeeDetail.Email,
+                                          LeaveFrom = leaveDetail.LeaveFrom,
+                                          LeaveTo = leaveDetail.LeaveTo,
+                                          NumberOfDays = leaveDetail.NumberOfDays,
+                                          LeaveReason = leaveDetail.LeaveReason,
+                                          LeaveStatus = leaveDetail.LeaveStatus,
+                                      }).ToListAsync();
 
-                        lstLeaveList.Add(leaveList);
-                    }
-                    else
-                    {
-                        response.Message = "users data not found";
-                        response.Status = false;
-                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                        return response;
-                    }
-                }
 
                 getLeaveResDTO.TotalCount = lstLeaveList.Count;
-                getLeaveResDTO.LeaveLists = lstLeaveList.OrderBy(x => x.FullName)
-                                                         .Skip((getLeaveReqDTO.Page - 1) * getLeaveReqDTO.ItemsPerPage)
-                                                          .Take(getLeaveReqDTO.ItemsPerPage).ToList(); ;
+
+
+                if (getLeaveReqDTO.OrderBy == true)
+                {
+                    getLeaveResDTO.LeaveLists = lstLeaveList.OrderBy(x => x.FullName)
+                                                        .Skip((getLeaveReqDTO.Page - 1) * getLeaveReqDTO.ItemsPerPage)
+                                                        .Take(getLeaveReqDTO.ItemsPerPage).ToList();
+                }
+                else
+                {
+                    getLeaveResDTO.LeaveLists = lstLeaveList.OrderByDescending(x => x.FullName)
+                                                       .Skip((getLeaveReqDTO.Page - 1) * getLeaveReqDTO.ItemsPerPage)
+                                                       .Take(getLeaveReqDTO.ItemsPerPage).ToList();
+                }
 
                 if (lstLeaveList.Count > 0)
                 {
@@ -154,7 +157,7 @@ namespace BusinessLayer
                             leaveMst.NumberOfDays = addLeaveReqDTO.NumberOfDays;
                             leaveMst.EmployeeId = employeeDetail.EmployeeId;
                             leaveMst.CreatedBy = 1;
-                            leaveMst.CreatedDate = DateTime.Now;
+                            leaveMst.CreatedDate = _commonHelper.GetCurrentDateTime();
                             leaveMst.IsActive = true;
                             leaveMst.IsDelete = false;
 
@@ -217,7 +220,7 @@ namespace BusinessLayer
                         // leaveDetail.LeaveStatus = updateLeaveReqDTO.LeaveStatus;
                         leaveDetail.NumberOfDays = updateLeaveReqDTO.NumberOfDays;
                         leaveDetail.UpdatedBy = 1;
-                        leaveDetail.UpdatedDate = DateTime.Now;
+                        leaveDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                         _dbContext.Entry(leaveDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();
@@ -258,7 +261,7 @@ namespace BusinessLayer
                 {
                     leaveDetail.IsDelete = true;
                     leaveDetail.UpdatedBy = 1;
-                    leaveDetail.UpdatedDate = DateTime.Now;
+                    leaveDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
                     _dbContext.Entry(leaveDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
 
@@ -286,14 +289,14 @@ namespace BusinessLayer
             {
                 UpdateLeaveStatusResDTO updateLeaveStatusResDTO = new UpdateLeaveStatusResDTO();
 
-                var leaveDetail =await _commonRepo.LeaveMstsList().FirstOrDefaultAsync(x => x.LeaveId == updateLeaveStatusReqDTO.LeaveId);
+                var leaveDetail = await _commonRepo.LeaveMstsList().FirstOrDefaultAsync(x => x.LeaveId == updateLeaveStatusReqDTO.LeaveId);
 
                 var leaveStatusDetail = _commonRepo.LeaveStatusMstsList().FirstOrDefault(x => x.LeaveStatusId == updateLeaveStatusReqDTO.LeaveStatusId);
-                if(leaveDetail != null && leaveStatusDetail != null)
+                if (leaveDetail != null && leaveStatusDetail != null)
                 {
                     leaveDetail.LeaveStatus = leaveStatusDetail.LeaveStatusName;
                     leaveDetail.UpdatedBy = 1;
-                    leaveDetail.UpdatedDate = DateTime.Now;
+                    leaveDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                     _dbContext.Entry(leaveDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
@@ -322,8 +325,8 @@ namespace BusinessLayer
             {
                 SelectStatusListResDTO selectStatusListResDTO = new SelectStatusListResDTO();
 
-                List<SelectStatusListResDTO> lstSelectStatusListResDTO =  _commonRepo.LeaveStatusMstsList().ToList().Adapt<List<SelectStatusListResDTO>>();
-                if(lstSelectStatusListResDTO.Count > 0)
+                List<SelectStatusListResDTO> lstSelectStatusListResDTO = _commonRepo.LeaveStatusMstsList().ToList().Adapt<List<SelectStatusListResDTO>>();
+                if (lstSelectStatusListResDTO.Count > 0)
                 {
                     response.Data = lstSelectStatusListResDTO;
                     response.Message = "data found successfully!";

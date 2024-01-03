@@ -9,6 +9,7 @@ namespace DTO.ReqDTO
     public class AddEmployeePersonalInformationReqDTO
     {
         public int EmployeeId { get; set; }
+
         public dynamic? Image { get; set; }
 
         public string FirstName { get; set; }

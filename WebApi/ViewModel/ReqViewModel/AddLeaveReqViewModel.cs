@@ -13,11 +13,8 @@ namespace WebApi.ViewModel.ReqViewModel
 
         [DataType(DataType.DateTime)]
         public DateTime LeaveTo { get; set; }
-
         public int NumberOfDays { get; set; }
-
         public int RemainingLeaves { get; set; }
-
         public string LeaveReason { get; set; }
     }
 }

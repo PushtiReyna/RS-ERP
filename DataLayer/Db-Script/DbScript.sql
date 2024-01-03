@@ -435,3 +435,19 @@ END
 
 --added on 02-01-2024 by PP-------------------------------------------END-----------------------------------------------
 --executed on local by PP on 02-01-2024---------------------------------------------------------------------------------
+
+
+--added on 03-01-2024 by PP-------------------------------------------START---------------------------------------------
+
+
+IF  EXISTS (SELECT * FROM   sys.columns WHERE  object_id = OBJECT_ID(N'dbo.EmployeeMst') AND name = 'Password')
+BEGIN
+	   ALTER TABLE EmployeeMst ALTER Column Password nvarchar(max) Not null;
+END
+ELSE
+BEGIN
+	PRINT 'Password Column Alter' 
+END
+
+--added on 03-01-2024 by PP-------------------------------------------END-----------------------------------------------
+--executed on local by PP on 03-01-2024---------------------------------------------------------------------------------

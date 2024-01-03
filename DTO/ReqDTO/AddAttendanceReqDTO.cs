@@ -10,7 +10,6 @@ namespace DTO.ReqDTO
     public class AddAttendanceReqDTO
     {
         public int EmployeeId { get; set; }
-
         public int AttendanceTypeId { get; set; }
 
         [DataType(DataType.Date)]

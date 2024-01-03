@@ -41,8 +41,8 @@ namespace WebApi.Controllers
             try
             {
                 response = await _iAttendance.GetAttendanceListByMonth(getAttendanceListByMonthReqViewModel.Adapt<GetAttendanceListByMonthReqDTO>());
-                List<GetAttendanceListByMonthResDTO> lstGetAttendanceListByMonthResDTO = response.Data;
-                response.Data = lstGetAttendanceListByMonthResDTO.Adapt<List<GetAttendanceListByMonthResViewModel>>();
+                GetAttendanceListByMonthResDTO lstGetAttendanceListByMonthResDTO = response.Data;
+                response.Data = lstGetAttendanceListByMonthResDTO.Adapt<GetAttendanceListByMonthResViewModel>();
             }
             catch { throw; }
             return response;

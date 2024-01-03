@@ -9,7 +9,6 @@ namespace DTO.ResDTO
     public class DepartmentResDTO
     {
         public int DepartmentId { get; set; }
-
         public string DepartmentName { get; set; }
     }
 }

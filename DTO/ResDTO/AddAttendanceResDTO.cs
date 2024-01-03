@@ -14,6 +14,5 @@ namespace DTO.ResDTO
         //public dynamic? Image { get; set; }
         //public string Name {  get; set; }
         //public string DayNoOfMonth { get; set; }
-
     }
 }

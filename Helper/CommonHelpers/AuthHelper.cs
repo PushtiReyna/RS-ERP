@@ -23,12 +23,15 @@ namespace ServiceLayer.CommonHelpers
         private readonly DBContext _dbContext;
         private readonly CommonRepo _commonRepo;
         private readonly IConfiguration _configuration;
+        private readonly CommonHelper _commonHelper;
 
-        public AuthHelper(DBContext dbContext, CommonRepo commonRepo, IConfiguration configuration)
+        public AuthHelper(DBContext dbContext, CommonRepo commonRepo, IConfiguration configuration, CommonHelper commonHelper)
         {
             _dbContext = dbContext;
             _commonRepo = commonRepo;
             _configuration = configuration;
+            _commonHelper = commonHelper;
+
         }
 
         public async Task<CommonResponse> Login(LoginReqDTO loginReqDTO)
@@ -38,8 +41,10 @@ namespace ServiceLayer.CommonHelpers
             {
                 LoginResDTO loginResDTO = new LoginResDTO();
                 TokenMst tokenMst = new TokenMst();
+                var existsPassword = _commonHelper.EncryptString(loginReqDTO.Password.Trim());
 
-                var userDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.Email == loginReqDTO.Email.Trim() && loginReqDTO.Password != null && x.Password == loginReqDTO.Password.Trim());
+                var userDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.Email == loginReqDTO.Email.Trim() && loginReqDTO.Password != null && x.Password == existsPassword);
+
                 if (userDetail != null)
                 {
                     var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JsonWebTokenKeys:IssuerSigningKey"]));
@@ -75,7 +80,7 @@ namespace ServiceLayer.CommonHelpers
                         tokenDetail.TokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:TokenExpiryMin"]));
                         tokenDetail.RefreshToken = refreshtokenstring;
                         tokenDetail.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryMin"]));
-                        tokenDetail.UpdatedDate = DateTime.Now;
+                        tokenDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
                         _dbContext.Entry(tokenDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();
 
@@ -87,7 +92,7 @@ namespace ServiceLayer.CommonHelpers
                         tokenMst.TokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:TokenExpiryMin"]));
                         tokenMst.RefreshToken = refreshtokenstring;
                         tokenMst.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:RefreshTokenexpiryMin"]));
-                        tokenMst.CreatedDate = DateTime.Now;
+                        tokenMst.CreatedDate = _commonHelper.GetCurrentDateTime();
                         tokenMst.EmployeeId = userDetail.EmployeeId;
                         _dbContext.TokenMsts.Add(tokenMst);
                         _dbContext.SaveChanges();
@@ -103,11 +108,10 @@ namespace ServiceLayer.CommonHelpers
                     response.Message = "login successfully";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
-
                 }
                 else
                 {
-                    response.Message = "email and password is not correct";
+                    response.Message = "email or password is not correct";
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 }
             }
@@ -190,7 +194,7 @@ namespace ServiceLayer.CommonHelpers
                                 tokenDetail.Token = tokenString;
                                 tokenDetail.TokenExpiryTime = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["JsonWebTokenKeys:TokenExpiryMin"]));
                                 tokenDetail.RefreshToken = refreshtokenstring;
-                                tokenDetail.UpdatedDate = DateTime.Now;
+                                tokenDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
                                 _dbContext.Entry(tokenDetail).State = EntityState.Modified;
                                 _dbContext.SaveChanges();
 

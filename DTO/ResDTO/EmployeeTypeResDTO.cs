@@ -9,7 +9,6 @@ namespace DTO.ResDTO
     public class EmployeeTypeResDTO
     {
         public int EmployeeTypeId { get; set; }
-
         public string EmployeeType { get; set; }
     }
 }

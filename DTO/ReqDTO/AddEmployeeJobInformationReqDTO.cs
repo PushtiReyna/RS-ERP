@@ -9,7 +9,6 @@ namespace DTO.ReqDTO
     public class AddEmployeeJobInformationReqDTO
     {
         public int EmployeeId { get; set; }
-
         public int? EmployeeTypeId { get; set; }
 
         public string? CompanyName { get; set; }

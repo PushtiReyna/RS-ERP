@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace DTO.ResDTO
 {
-    public class GetHolidayResDTO
+    public class GetHolidayListResDTO
+    {
+        public int TotalCount { get; set; }
+        public List<HolidayList> HolidayLists { get; set; }
+    }
+    public class HolidayList
     {
         public int HolidayId { get; set; }
 

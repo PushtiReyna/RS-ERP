@@ -18,10 +18,13 @@ namespace BusinessLayer
     {
         private readonly DBContext _dbContext;
         private readonly CommonRepo _commonRepo;
-        public DropDownMstBLL(DBContext dbContext, CommonRepo commonRepo)
+        private readonly CommonHelper _commonHelper;
+
+        public DropDownMstBLL(DBContext dbContext, CommonRepo commonRepo, CommonHelper commonHelper)
         {
             _dbContext = dbContext;
             _commonRepo = commonRepo;
+            _commonHelper = commonHelper;
         }
         public async Task<CommonResponse> AddEmployeeType(EmployeeTypeReqDTO employeeTypeReqDTO)
         {
@@ -38,7 +41,7 @@ namespace BusinessLayer
                     if (employeeTypeDetail == null)
                     {
                         employeeTypeMst.EmployeeType = employeeTypeReqDTO.EmployeeType.Trim();
-                        employeeTypeMst.CreatedDate = DateTime.Now;
+                        employeeTypeMst.CreatedDate = _commonHelper.GetCurrentDateTime();
                         employeeTypeMst.CreatedBy = 1;
                         employeeTypeMst.IsActive = true;
                         employeeTypeMst.IsDelete = false;
@@ -84,7 +87,7 @@ namespace BusinessLayer
                     if (designationDetail == null)
                     {
                         designationMst.DesignationName = designationReqDTO.DesignationName.Trim();
-                        designationMst.CreatedDate = DateTime.Now;
+                        designationMst.CreatedDate = _commonHelper.GetCurrentDateTime();
                         designationMst.CreatedBy = 1;
                         designationMst.IsActive = true;
                         designationMst.IsDelete = false;
@@ -130,7 +133,7 @@ namespace BusinessLayer
                     if (departmentDetail == null)
                     {
                         departmentMst.DepartmentName = departmentReqDTO.DepartmentName.Trim();
-                        departmentMst.CreatedDate = DateTime.Now;
+                        departmentMst.CreatedDate = _commonHelper.GetCurrentDateTime();
                         departmentMst.CreatedBy = 1;
                         departmentMst.IsActive = true;
                         departmentMst.IsDelete = false;
@@ -176,7 +179,7 @@ namespace BusinessLayer
                     if (roleDetail == null)
                     {
                         roleMst.RoleType = roleReqDTO.RoleType.Trim();
-                        roleMst.CreatedDate = DateTime.Now;
+                        roleMst.CreatedDate = _commonHelper.GetCurrentDateTime(); 
                         roleMst.CreatedBy = 1;
                         roleMst.IsActive = true;
                         roleMst.IsDelete = false;
@@ -222,7 +225,7 @@ namespace BusinessLayer
                     if (reportingManagerDetail == null)
                     {
                         reportingManager.ReportingManagerName = reportingManagerReqDTO.ReportingManagerName.Trim();
-                        reportingManager.CreatedDate = DateTime.Now;
+                        reportingManager.CreatedDate = _commonHelper.GetCurrentDateTime();
                         reportingManager.CreatedBy = 1;
                         reportingManager.IsActive = true;
                         reportingManager.IsDelete = false;
@@ -268,7 +271,7 @@ namespace BusinessLayer
                     if (attritionDetail == null)
                     {
                         attritionType.AttritionTypeName = attritionTypeReqDTO.AttritionTypeName.Trim();
-                        attritionType.CreatedDate = DateTime.Now;
+                        attritionType.CreatedDate = _commonHelper.GetCurrentDateTime();
                         attritionType.CreatedBy = 1;
                         attritionType.IsActive = true;
                         attritionType.IsDelete = false;

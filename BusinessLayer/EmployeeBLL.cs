@@ -22,11 +22,13 @@ namespace BusinessLayer
         private readonly DBContext _dbContext;
         private readonly CommonRepo _commonRepo;
         public readonly IHostingEnvironment _hostEnvironment;
-        public EmployeeBLL(DBContext dbContext, CommonRepo commonRepo, IHostingEnvironment hostEnvironment)
+        private readonly CommonHelper _commonHelper;
+        public EmployeeBLL(DBContext dbContext, CommonRepo commonRepo, IHostingEnvironment hostEnvironment, CommonHelper commonHelper)
         {
             _dbContext = dbContext;
             _commonRepo = commonRepo;
             _hostEnvironment = hostEnvironment;
+            _commonHelper = commonHelper;
         }
 
         public async Task<CommonResponse> GetEmployee(GetEmployeeReqDTO getEmployeeReqDTO)
@@ -53,9 +55,19 @@ namespace BusinessLayer
                                     }).ToList()/*.Adapt<List<GetUserResDTO>>()*/;
 
                 getEmployeeResDTO.TotalCount = lstEmployeeeList.Count;
-                getEmployeeResDTO.EmployeeeLists = lstEmployeeeList.OrderBy(x => x.EmployeeId)
-                                                                  .Skip((getEmployeeReqDTO.Page - 1) * getEmployeeReqDTO.ItemsPerPage)
-                                                                  .Take(getEmployeeReqDTO.ItemsPerPage).ToList();
+
+                if(getEmployeeReqDTO.OrderBy == true)
+                {
+                    getEmployeeResDTO.EmployeeeLists = lstEmployeeeList.OrderBy(x => x.EmployeeId)
+                                                                .Skip((getEmployeeReqDTO.Page - 1) * getEmployeeReqDTO.ItemsPerPage)
+                                                                .Take(getEmployeeReqDTO.ItemsPerPage).ToList();
+                }
+                else
+                {
+                    getEmployeeResDTO.EmployeeeLists = lstEmployeeeList.OrderByDescending(x => x.EmployeeId)
+                                                                .Skip((getEmployeeReqDTO.Page - 1) * getEmployeeReqDTO.ItemsPerPage)
+                                                                .Take(getEmployeeReqDTO.ItemsPerPage).ToList();
+                }
 
                 if (lstEmployeeeList.Count > 0)
                 {
@@ -237,7 +249,7 @@ namespace BusinessLayer
                     employeeMst.ContactNumber = addEmployeePersonalInformationReqDTO.ContactNumber;
                     employeeMst.EmergencyContactName = addEmployeePersonalInformationReqDTO.EmergencyContactName;
                     employeeMst.EmergencyContactNo = addEmployeePersonalInformationReqDTO.EmergencyContactNo;
-                    employeeMst.Password = addEmployeePersonalInformationReqDTO.Password;
+                    employeeMst.Password = _commonHelper.EncryptString(addEmployeePersonalInformationReqDTO.Password.Trim());          
                     employeeMst.MartialStatus = addEmployeePersonalInformationReqDTO.MartialStatus;
                     employeeMst.PermanentAddress = addEmployeePersonalInformationReqDTO.PermanentAddress;
                     employeeMst.PermanentAddressPostalCode = addEmployeePersonalInformationReqDTO.PermanentAddressPostalCode;
@@ -247,7 +259,7 @@ namespace BusinessLayer
                     employeeMst.CreatedBy = 1;
                     employeeMst.IsActive = true;
                     employeeMst.IsDelete = false;
-                    employeeMst.CreatedDate = DateTime.Now;
+                    employeeMst.CreatedDate = _commonHelper.GetCurrentDateTime();
 
                     _dbContext.EmployeeMsts.Add(employeeMst);
                     _dbContext.SaveChanges();
@@ -292,7 +304,7 @@ namespace BusinessLayer
                     employeeDetail.RoleId = addEmployeeJobInformationReqDTO.RoleId;
                     employeeDetail.ReportingManagerId = addEmployeeJobInformationReqDTO.ReportingManagerId;
                     employeeDetail.UpdatedBy = 1;
-                    employeeDetail.UpdatedDate = DateTime.Now;
+                    employeeDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                     _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
@@ -340,7 +352,7 @@ namespace BusinessLayer
                     employeeDetail.PtApplicable = addEmployeeBankAndSalaryInformationReqDTO.PtApplicable;
                     employeeDetail.EsiApplicable = addEmployeeBankAndSalaryInformationReqDTO.EsiApplicable;
                     employeeDetail.UpdatedBy = 1;
-                    employeeDetail.UpdatedDate = DateTime.Now;
+                    employeeDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                     _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
@@ -400,14 +412,13 @@ namespace BusinessLayer
                         employeeDetail.ContactNumber = updateEmployeePersonalInformationReqDTO.ContactNumber;
                         employeeDetail.EmergencyContactName = updateEmployeePersonalInformationReqDTO.EmergencyContactName;
                         employeeDetail.EmergencyContactNo = updateEmployeePersonalInformationReqDTO.EmergencyContactNo;
-                        employeeDetail.Password = updateEmployeePersonalInformationReqDTO.Password;
                         employeeDetail.MartialStatus = updateEmployeePersonalInformationReqDTO.MartialStatus;
                         employeeDetail.PermanentAddress = updateEmployeePersonalInformationReqDTO.PermanentAddress;
                         employeeDetail.PermanentAddressPostalCode = updateEmployeePersonalInformationReqDTO.PermanentAddressPostalCode;
                         employeeDetail.CurrentAddress = updateEmployeePersonalInformationReqDTO.CurrentAddress;
                         employeeDetail.CurrentAddressPostalCode = updateEmployeePersonalInformationReqDTO.CurrentAddressPostalCode;
                         employeeDetail.UpdatedBy = 1;
-                        employeeDetail.UpdatedDate = DateTime.Now;
+                        employeeDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                         _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();
@@ -453,7 +464,7 @@ namespace BusinessLayer
                     employeeDetail.RoleId = updateEmployeeJobInformationReqDTO.RoleId;
                     employeeDetail.ReportingManagerId = updateEmployeeJobInformationReqDTO.ReportingManagerId;
                     employeeDetail.UpdatedBy = 1;
-                    employeeDetail.UpdatedDate = DateTime.Now;
+                    employeeDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                     _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
@@ -501,7 +512,7 @@ namespace BusinessLayer
                     employeeDetail.PtApplicable = updateEmployeeBankAndSalaryInformationReqDTO.PtApplicable;
                     employeeDetail.EsiApplicable = updateEmployeeBankAndSalaryInformationReqDTO.EsiApplicable;
                     employeeDetail.UpdatedBy = 1;
-                    employeeDetail.UpdatedDate = DateTime.Now;
+                    employeeDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                     _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
@@ -535,7 +546,7 @@ namespace BusinessLayer
                 {
                     employeeDetail.IsDelete = true;
                     employeeDetail.UpdatedBy = 1;
-                    employeeDetail.UpdatedDate = DateTime.Now;
+                    employeeDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
                     employeeDetail.EmployeeStatus = false;
                     _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
@@ -580,7 +591,7 @@ namespace BusinessLayer
                         resignMst.FinalDate = resignReqDTO.FinalDate;
                         resignMst.FinalStatus = resignReqDTO.FinalStatus;
                         resignMst.CreatedBy = 1;
-                        resignMst.CreatedDate = DateTime.Now;
+                        resignMst.CreatedDate = _commonHelper.GetCurrentDateTime();
 
                         _dbContext.ResignMsts.Add(resignMst);
                         _dbContext.SaveChanges();

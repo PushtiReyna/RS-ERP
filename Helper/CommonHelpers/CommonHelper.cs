@@ -7,20 +7,20 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
 
 namespace ServiceLayer.CommonHelpers
 {
     public class CommonHelper
     {
         private readonly IConfiguration _configuration;
+
         public CommonHelper(IConfiguration configuration)
         {
-
             _configuration = configuration;
-
         }
 
-        public async Task<CommonResponse> SendLinkEmail(string email,int id)
+        public async Task<CommonResponse> SendLinkEmail(string email, int id)
         {
             CommonResponse response = new CommonResponse();
             try
@@ -58,6 +58,86 @@ namespace ServiceLayer.CommonHelpers
             }
             catch { throw; }
             return response;
+        }
+
+        public DateTime GetCurrentDateTime()
+        {
+            return DateTime.Now;
+        }
+
+        public string EncryptString(string plainText)
+        {
+            var key = Encoding.UTF8.GetBytes(_configuration["EncryptionKeys:EncryptionSecurityKey"].ToString());
+            var iv = Encoding.UTF8.GetBytes(_configuration["EncryptionKeys:EncryptionSecurityIV"].ToString());
+
+            if (plainText == null || plainText.Length <= 0)
+            {
+                throw new ArgumentNullException("plainText");
+            }
+            if (key == null || key.Length <= 0)
+            {
+                throw new ArgumentNullException("key");
+            }
+            if (iv == null || iv.Length <= 0)
+            {
+                throw new ArgumentNullException("iv");
+            }
+
+            byte[] encrypted;
+            using (Aes aes = Aes.Create())
+            {
+                aes.KeySize = 128;
+                aes.Key = key;
+                aes.IV = iv;
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
+                        {
+                            streamWriter.Write(plainText);
+                        }
+                        encrypted = memoryStream.ToArray();
+                    }
+                }
+            }
+            return Convert.ToBase64String(encrypted);
+        }
+
+        public string DecryptString(string cipherText)
+        {
+            var key = Encoding.UTF8.GetBytes(_configuration["EncryptionKeys:EncryptionSecurityKey"].ToString());
+            var iv = Encoding.UTF8.GetBytes(_configuration["EncryptionKeys:EncryptionSecurityIV"].ToString());
+            var encrypted = Convert.FromBase64String(cipherText);
+
+            string plaintext = string.Empty;
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.KeySize = 128;
+                aes.Key = key;
+                aes.IV = iv;
+                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+                try
+                {
+                    using (MemoryStream memoryStream = new MemoryStream(encrypted))
+                    {
+                        using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
+                            {
+                                plaintext = streamReader.ReadToEnd();
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    plaintext = "keyError";
+                }
+            }
+            return plaintext;
         }
     }
 }

@@ -9,7 +9,6 @@ namespace DTO.ResDTO
     public class ReportingManagerResDTO
     {
         public int ReportingManagerId { get; set; }
-
         public string ReportingManagerName { get; set; }
     }
 }

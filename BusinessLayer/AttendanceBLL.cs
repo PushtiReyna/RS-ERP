@@ -14,8 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
-using AttendanceList = Helper.CommonModels.AttendanceList;
-//using AttendanceList = Helper.CommonModels.AttendanceList;
+using AttendanceList = DTO.ResDTO.AttendanceList;
+
 
 namespace BusinessLayer
 {
@@ -29,10 +29,13 @@ namespace BusinessLayer
 
         private readonly CommonRepo _commonRepo;
         private readonly DBContext _dbContext;
-        public AttendanceBLL(CommonRepo commonRepo, DBContext dbContext)
+        private readonly CommonHelper _commonHelper;
+        public AttendanceBLL(CommonRepo commonRepo, DBContext dbContext, CommonHelper commonHelper)
         {
             _commonRepo = commonRepo;
             _dbContext = dbContext;
+            _commonHelper = commonHelper;
+
         }
 
         public async Task<CommonResponse> GetAttendanceTypeList()
@@ -68,23 +71,39 @@ namespace BusinessLayer
         {
             CommonResponse response = new CommonResponse();
             try
-            {       
+            {
                 GetAttendanceListByMonthResDTO getAttendanceListByMonthResDTO = new GetAttendanceListByMonthResDTO();
 
-                List<GetAttendanceListByMonthResDTO> lstGetAttendanceListByMonthResDTO = (from attendancedetail in _commonRepo.AttendanceMstsList().Where(x => x.Date.Month == getAttendanceListByMonthReqDTO.Date.Month)
-                                    join employeeDetail in _commonRepo.EmployeeMstList()
-                                           on attendancedetail.EmployeeId equals employeeDetail.EmployeeId
-                                    select new GetAttendanceListByMonthResDTO
-                                    {
-                                        DayNoOfMonth = attendancedetail.DayNoOfMonth,
-                                        AttendanceTypeName = attendancedetail.AttendanceTypeName,
-                                        Image = employeeDetail.Image,
-                                        Name = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName
-                                    }).ToList().Adapt<List<GetAttendanceListByMonthResDTO>>();
+                List<AttendanceList> lstAttendanceList = new List<AttendanceList>();
+                lstAttendanceList = (from attendancedetail in _commonRepo.AttendanceMstsList().Where(x => x.Date.Month == getAttendanceListByMonthReqDTO.Date.Month)
+                                     join employeeDetail in _commonRepo.EmployeeMstList()
+                                            on attendancedetail.EmployeeId equals employeeDetail.EmployeeId
+                                     select new AttendanceList
+                                     {
+                                         DayNoOfMonth = attendancedetail.DayNoOfMonth,
+                                         AttendanceTypeName = attendancedetail.AttendanceTypeName,
+                                         Image = employeeDetail.Image,
+                                         Name = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName
+                                     }).ToList();
 
-                if(lstGetAttendanceListByMonthResDTO.Count > 0 )
+                getAttendanceListByMonthResDTO.TotalCount = lstAttendanceList.Count;
+
+                if (getAttendanceListByMonthReqDTO.OrderBy == true)
                 {
-                    response.Data = lstGetAttendanceListByMonthResDTO;
+                    getAttendanceListByMonthResDTO.AttendanceLists = lstAttendanceList.OrderBy(x => x.DayNoOfMonth)
+                                                                                      .Skip((getAttendanceListByMonthReqDTO.Page - 1) * getAttendanceListByMonthReqDTO.ItemsPerPage)
+                                                                                      .Take(getAttendanceListByMonthReqDTO.ItemsPerPage).ToList();
+                }
+                else
+                {
+                    getAttendanceListByMonthResDTO.AttendanceLists = lstAttendanceList.OrderByDescending(x => x.DayNoOfMonth)
+                                                                                      .Skip((getAttendanceListByMonthReqDTO.Page - 1) * getAttendanceListByMonthReqDTO.ItemsPerPage)
+                                                                                      .Take(getAttendanceListByMonthReqDTO.ItemsPerPage).ToList();
+                }
+
+                if (lstAttendanceList.Count > 0)
+                {
+                    response.Data = getAttendanceListByMonthResDTO;
                     response.Message = "data found successfully!";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
@@ -104,7 +123,7 @@ namespace BusinessLayer
         {
             CommonResponse response = new CommonResponse();
             try
-            {               
+            {
                 AttendanceMst attendanceMst = new AttendanceMst();
                 AddAttendanceResDTO attendanceResDTO = new AddAttendanceResDTO();
 
@@ -124,7 +143,7 @@ namespace BusinessLayer
                         attendanceMst.IsActive = true;
                         attendanceMst.IsDelete = false;
                         attendanceMst.CreatedBy = 1;
-                        attendanceMst.CreatedDate = DateTime.Now;
+                        attendanceMst.CreatedDate = _commonHelper.GetCurrentDateTime();
 
                         _dbContext.AttendanceMsts.Add(attendanceMst);
                         _dbContext.SaveChanges();
@@ -160,7 +179,7 @@ namespace BusinessLayer
             try
             {
                 UpdateAttendanceResDTO updateAttendanceResDTO = new UpdateAttendanceResDTO();
-                var attendanceDetail = _commonRepo.AttendanceMstsList().FirstOrDefault(x => x.AttendanceId ==  updateAttendanceReqDTO.AttendanceId);
+                var attendanceDetail = _commonRepo.AttendanceMstsList().FirstOrDefault(x => x.AttendanceId == updateAttendanceReqDTO.AttendanceId);
 
                 if (attendanceDetail != null)
                 {
@@ -176,7 +195,7 @@ namespace BusinessLayer
                         attendanceDetail.DayNoOfMonth = updateAttendanceReqDTO.Date.ToString("dd");
                         attendanceDetail.AttendanceTypeName = attendanceTypeDetail.AttendanceTypeName;
                         attendanceDetail.UpdatedBy = 1;
-                        attendanceDetail.UpdatedDate = DateTime.Now;
+                        attendanceDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                         _dbContext.Entry(attendanceDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();

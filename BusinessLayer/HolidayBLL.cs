@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BusinessLayer
 {
@@ -17,21 +18,51 @@ namespace BusinessLayer
     {
         private readonly DBContext _dbContext;
         private readonly CommonRepo _commonRepo;
-        public HolidayBLL(DBContext dbContext, CommonRepo commonRepo)
+        private readonly CommonHelper _commonHelper;
+        public HolidayBLL(DBContext dbContext, CommonRepo commonRepo, CommonHelper commonHelper)
         {
             _dbContext = dbContext;
             _commonRepo = commonRepo;
+            _commonHelper = commonHelper;
         }
 
-        public async Task<CommonResponse> GetHolidayList()
+        public async Task<CommonResponse> GetHolidayList(GetHolidayListReqDTO getHolidayListReqDTO)
         {
             CommonResponse response = new CommonResponse();
             try
             {
-                List<GetHolidayResDTO> lstGetHolidayResDTO = _commonRepo.HolidayMstsList().ToList().Adapt<List<GetHolidayResDTO>>();
-                if (lstGetHolidayResDTO.Count > 0)
+                GetHolidayListResDTO getHolidayListResDTO = new GetHolidayListResDTO();
+
+                List<HolidayList> lstHolidayList = new List<HolidayList>();
+
+                lstHolidayList = await (from attendanceDetail in _commonRepo.HolidayMstsList()
+                                  select new HolidayList
+                                  {
+                                      HolidayId = attendanceDetail.HolidayId,
+                                      Name = attendanceDetail.Name,
+                                      Date = attendanceDetail.Date,
+                                      Day = attendanceDetail.Day,
+                                  }).ToListAsync();
+
+
+                getHolidayListResDTO.TotalCount = lstHolidayList.Count;
+
+                if(getHolidayListReqDTO.OrderBy == true) 
+                {
+                    getHolidayListResDTO.HolidayLists = lstHolidayList.OrderBy(x => x.Date)
+                                                                      .Skip((getHolidayListReqDTO.Page - 1) * getHolidayListReqDTO.ItemsPerPage)
+                                                                      .Take(getHolidayListReqDTO.ItemsPerPage).ToList();
+                }
+                else
+                {
+                    getHolidayListResDTO.HolidayLists = lstHolidayList.OrderByDescending(x => x.Date)
+                                                                      .Skip((getHolidayListReqDTO.Page - 1) * getHolidayListReqDTO.ItemsPerPage)
+                                                                      .Take(getHolidayListReqDTO.ItemsPerPage).ToList();
+                }
+
+                if (lstHolidayList.Count > 0)
                 {                   
-                    response.Data = lstGetHolidayResDTO;
+                    response.Data = getHolidayListResDTO;
                     response.Message = "data found successfully!";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
@@ -66,7 +97,7 @@ namespace BusinessLayer
                         holidaysMst.IsActive = true;
                         holidaysMst.IsDelete = false;
                         holidaysMst.CreatedBy = 1;
-                        holidaysMst.CreatedDate = DateTime.Now;
+                        holidaysMst.CreatedDate = _commonHelper.GetCurrentDateTime();
 
                         _dbContext.HolidaysMsts.Add(holidaysMst);
                         _dbContext.SaveChanges();
@@ -119,7 +150,7 @@ namespace BusinessLayer
                             holidayDetail.Date = updateHolidayReqDTO.Date;
                             holidayDetail.Day = updateHolidayReqDTO.Date.DayOfWeek.ToString();
                             holidayDetail.UpdatedBy = 1;
-                            holidayDetail.UpdatedDate = DateTime.Now;
+                            holidayDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
 
                             _dbContext.Entry(holidayDetail).State = EntityState.Modified;
                             _dbContext.SaveChanges();
@@ -127,7 +158,7 @@ namespace BusinessLayer
                             updateHolidayResDTO.HolidayId = holidayDetail.HolidayId;
                             response.Data = updateHolidayResDTO;
                             response.Status = true;
-                            response.Message = "Holiday Name added successfully";
+                            response.Message = "Holiday Name updated successfully";
                             response.StatusCode = System.Net.HttpStatusCode.OK;
                         }
                     }
@@ -160,7 +191,7 @@ namespace BusinessLayer
                 {
                     holidayDetail.IsDelete = true;
                     holidayDetail.UpdatedBy = 1;
-                    holidayDetail.UpdatedDate = DateTime.Now;
+                    holidayDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
                     _dbContext.Entry(holidayDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
 

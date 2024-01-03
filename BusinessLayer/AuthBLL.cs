@@ -51,10 +51,19 @@ namespace BusinessLayer
                 var employeeDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == changePasswordReqDTO.EmployeeId);
                 if (employeeDetail != null)
                 {
-                    if (employeeDetail.Password.Trim() == changePasswordReqDTO.Password.Trim())
+                    //var encryptPassword = _commonHelper.EncryptString(changePasswordReqDTO.Password.Trim());
+                    var decryptPassword = _commonHelper.DecryptString(employeeDetail.Password.Trim());
+
+                    if (decryptPassword == changePasswordReqDTO.NewPassword.Trim())
                     {
-                        employeeDetail.Password = changePasswordReqDTO.NewPassword.Trim();
-                        employeeDetail.UpdatedDate = DateTime.Now;
+                        response.Message = "password is already exists";
+                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                        return response;
+                    }
+                    else  if (decryptPassword == changePasswordReqDTO.Password.Trim())
+                    {
+                        employeeDetail.Password = _commonHelper.EncryptString(changePasswordReqDTO.NewPassword.Trim());
+                        employeeDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
                         employeeDetail.UpdatedBy = 1;
                         _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                         _dbContext.SaveChanges();
@@ -64,12 +73,6 @@ namespace BusinessLayer
                         response.Message = "changepassword successfully!";
                         response.Status = true;
                         response.StatusCode = System.Net.HttpStatusCode.OK;
-                    }
-                    else if (employeeDetail.Password.Trim() == changePasswordReqDTO.NewPassword.Trim())
-                    {
-                        response.Message = "password is already exists";
-                        response.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                        return response;
                     }
                     else
                     {
@@ -96,8 +99,8 @@ namespace BusinessLayer
                 var employeeDetail = _commonRepo.EmployeeMstList().FirstOrDefault(x => x.EmployeeId == resetPasswordReqDTO.EmployeeId);
                 if (employeeDetail != null)
                 {
-                    employeeDetail.Password = resetPasswordReqDTO.NewPassword.Trim();
-                    employeeDetail.UpdatedDate = DateTime.Now;
+                    employeeDetail.Password = _commonHelper.EncryptString(resetPasswordReqDTO.NewPassword.Trim());
+                    employeeDetail.UpdatedDate = _commonHelper.GetCurrentDateTime();
                     employeeDetail.UpdatedBy = 1;
                     _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
