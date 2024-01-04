@@ -96,7 +96,7 @@ namespace BusinessLayer
             try
             {
                 ResetPasswordResDTO resetPasswordResDTO = new ResetPasswordResDTO();
-                var employeeDetail = _commonRepo.EmployeeMstList().FirstOrDefault(x => x.EmployeeId == resetPasswordReqDTO.EmployeeId);
+                var employeeDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == resetPasswordReqDTO.EmployeeId);
                 if (employeeDetail != null)
                 {
                     employeeDetail.Password = _commonHelper.EncryptString(resetPasswordReqDTO.NewPassword.Trim());
@@ -125,7 +125,7 @@ namespace BusinessLayer
             CommonResponse response = new CommonResponse();
             try
             {
-                var employeeDetail = _commonRepo.EmployeeMstList().FirstOrDefault(x => x.Email == forgotPasswordReqDTO.Email);
+                var employeeDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.Email == forgotPasswordReqDTO.Email);
                 if(employeeDetail != null)
                 {
                     await _commonHelper.SendLinkEmail(forgotPasswordReqDTO.Email, employeeDetail.EmployeeId);

@@ -87,7 +87,7 @@ namespace BusinessLayer
                                           on leaveDetail.EmployeeId equals employeeDetail.EmployeeId
                                       select new LeaveList
                                       {
-                                          FullName = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName,
+                                          Name = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName,
                                           Image = employeeDetail.Image,
                                           Email = employeeDetail.Email,
                                           LeaveFrom = leaveDetail.LeaveFrom,
@@ -97,19 +97,25 @@ namespace BusinessLayer
                                           LeaveStatus = leaveDetail.LeaveStatus,
                                       }).ToListAsync();
 
-
-                getLeaveResDTO.TotalCount = lstLeaveList.Count;
-
+                if (getLeaveReqDTO.SearchString != null && !string.IsNullOrWhiteSpace(getLeaveReqDTO.SearchString.Trim()))
+                {
+                    lstLeaveList = lstLeaveList.Where(x => x.Name.ToLower().Contains(getLeaveReqDTO.SearchString.ToLower())).ToList();
+                    getLeaveResDTO.TotalCount = lstLeaveList.Count;
+                }
+                else
+                {
+                    getLeaveResDTO.TotalCount = lstLeaveList.Count;
+                }
 
                 if (getLeaveReqDTO.OrderBy == true)
                 {
-                    getLeaveResDTO.LeaveLists = lstLeaveList.OrderBy(x => x.FullName)
+                    getLeaveResDTO.LeaveLists = lstLeaveList.OrderBy(x => x.Name)
                                                         .Skip((getLeaveReqDTO.Page - 1) * getLeaveReqDTO.ItemsPerPage)
                                                         .Take(getLeaveReqDTO.ItemsPerPage).ToList();
                 }
                 else
                 {
-                    getLeaveResDTO.LeaveLists = lstLeaveList.OrderByDescending(x => x.FullName)
+                    getLeaveResDTO.LeaveLists = lstLeaveList.OrderByDescending(x => x.Name)
                                                        .Skip((getLeaveReqDTO.Page - 1) * getLeaveReqDTO.ItemsPerPage)
                                                        .Take(getLeaveReqDTO.ItemsPerPage).ToList();
                 }
@@ -140,13 +146,13 @@ namespace BusinessLayer
                 LeaveMst leaveMst = new LeaveMst();
                 AddLeaveResDTO addLeaveResDTO = new AddLeaveResDTO();
 
-                var employeeDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == addLeaveReqDTO.EmployeeId);
+                bool isExist = await _commonRepo.EmployeeMstList().AnyAsync(x => x.EmployeeId == addLeaveReqDTO.EmployeeId);
 
                 var leaveList = await _commonRepo.LeaveMstsList().Where(x => x.EmployeeId == addLeaveReqDTO.EmployeeId && x.LeaveFrom == addLeaveReqDTO.LeaveFrom && x.LeaveTo == addLeaveReqDTO.LeaveTo).ToListAsync();
 
                 if (leaveList.Count <= 0)
                 {
-                    if (employeeDetail != null)
+                    if (isExist == true)
                     {
                         if (addLeaveReqDTO.LeaveTo >= addLeaveReqDTO.LeaveFrom)
                         {
@@ -155,7 +161,7 @@ namespace BusinessLayer
                             leaveMst.LeaveReason = addLeaveReqDTO.LeaveReason;
                             leaveMst.RemainingLeaves = addLeaveReqDTO.RemainingLeaves;
                             leaveMst.NumberOfDays = addLeaveReqDTO.NumberOfDays;
-                            leaveMst.EmployeeId = employeeDetail.EmployeeId;
+                            leaveMst.EmployeeId = addLeaveReqDTO.EmployeeId;
                             leaveMst.CreatedBy = 1;
                             leaveMst.CreatedDate = _commonHelper.GetCurrentDateTime();
                             leaveMst.IsActive = true;
@@ -173,7 +179,7 @@ namespace BusinessLayer
                         else
                         {
                             response.Status = false;
-                            response.Message = "leave to value not correct";
+                            response.Message = "leave To value not correct";
                             response.StatusCode = System.Net.HttpStatusCode.OK;
                         }
                     }

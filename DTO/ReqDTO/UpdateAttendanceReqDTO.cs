@@ -11,8 +11,5 @@ namespace DTO.ReqDTO
     {
         public int AttendanceId { get; set; }
         public int AttendanceTypeId { get; set; }
-
-        [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
     }
 }

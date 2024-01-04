@@ -44,10 +44,17 @@ namespace BusinessLayer
                                       Day = attendanceDetail.Day,
                                   }).ToListAsync();
 
+                if (getHolidayListReqDTO.SearchString != null && !string.IsNullOrWhiteSpace(getHolidayListReqDTO.SearchString.Trim()))
+                {
+                    lstHolidayList = lstHolidayList.Where(x => x.Name.ToLower().Contains(getHolidayListReqDTO.SearchString.ToLower())).ToList();
+                    getHolidayListResDTO.TotalCount = lstHolidayList.Count;
+                }
+                else
+                {
+                    getHolidayListResDTO.TotalCount = lstHolidayList.Count;
+                }
 
-                getHolidayListResDTO.TotalCount = lstHolidayList.Count;
-
-                if(getHolidayListReqDTO.OrderBy == true) 
+                if (getHolidayListReqDTO.OrderBy == true) 
                 {
                     getHolidayListResDTO.HolidayLists = lstHolidayList.OrderBy(x => x.Date)
                                                                       .Skip((getHolidayListReqDTO.Page - 1) * getHolidayListReqDTO.ItemsPerPage)
@@ -86,10 +93,10 @@ namespace BusinessLayer
                 HolidaysMst holidaysMst = new HolidaysMst();
                 AddHolidayResDTO addHolidayResDTO = new AddHolidayResDTO();
 
-                if (!string.IsNullOrWhiteSpace(addHolidayReqDTO.Name))
+                if (addHolidayReqDTO.Name.Trim() != null && !string.IsNullOrWhiteSpace(addHolidayReqDTO.Name.Trim()))
                 {
-                    var holidayDetail = await _commonRepo.HolidayMstsList().FirstOrDefaultAsync(x => x.Name.Trim() == addHolidayReqDTO.Name.Trim());
-                    if (holidayDetail == null)
+                    bool isExist = await _commonRepo.HolidayMstsList().AnyAsync(x => x.Name.Trim().ToLower() == addHolidayReqDTO.Name.Trim().ToLower());
+                    if (isExist == false)
                     {
                         holidaysMst.Name = addHolidayReqDTO.Name;
                         holidaysMst.Date = addHolidayReqDTO.Date;
@@ -133,12 +140,12 @@ namespace BusinessLayer
             {
                 UpdateHolidayResDTO updateHolidayResDTO = new UpdateHolidayResDTO();
 
-                if (!string.IsNullOrWhiteSpace(updateHolidayReqDTO.Name))
+                if (updateHolidayReqDTO.Name.Trim() != null && !string.IsNullOrWhiteSpace(updateHolidayReqDTO.Name.Trim()))
                 {
                     var holidayDetail = await _commonRepo.HolidayMstsList().FirstOrDefaultAsync(x => x.HolidayId == updateHolidayReqDTO.HolidayId);
                     if (holidayDetail != null)
                     {
-                        if (_commonRepo.HolidayMstsList().FirstOrDefault(x => x.Name.Trim() == updateHolidayReqDTO.Name.Trim() && x.HolidayId != updateHolidayReqDTO.HolidayId) != null)
+                        if (_commonRepo.HolidayMstsList().FirstOrDefault(x => x.Name.Trim().ToLower() == updateHolidayReqDTO.Name.Trim().ToLower() && x.HolidayId != updateHolidayReqDTO.HolidayId) != null)
                         {
                             response.Message = "Holiday name already exists";
                             response.Status = false;

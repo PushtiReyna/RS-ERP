@@ -69,8 +69,8 @@ namespace WebApi.Controllers
             try
             {
                 response = await _iAttendance.UpdateAttendance(addAttendanceReqViewModel.Adapt<UpdateAttendanceReqDTO>());
-                UpdateAttendanceResDTO addAttendanceResDTO = response.Data;
-                response.Data = addAttendanceResDTO.Adapt<UpdateAttendanceResViewModel>();
+                UpdateAttendanceResDTO updateAttendanceResDTO = response.Data;
+                response.Data = updateAttendanceResDTO.Adapt<UpdateAttendanceResViewModel>();
             }
             catch { throw; }
             return response;

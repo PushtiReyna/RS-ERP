@@ -31,7 +31,6 @@ namespace ServiceLayer.CommonHelpers
             _commonRepo = commonRepo;
             _configuration = configuration;
             _commonHelper = commonHelper;
-
         }
 
         public async Task<CommonResponse> Login(LoginReqDTO loginReqDTO)
@@ -124,12 +123,12 @@ namespace ServiceLayer.CommonHelpers
             CommonResponse response = new CommonResponse();
             try
             {
-                var tokenDetail = _commonRepo.TokenMstList().FirstOrDefault(x => x.Token == tokenReqDTO.Token.Trim() && x.RefreshToken == tokenReqDTO.RefreshToken.Trim());
+                var tokenDetail = await _commonRepo.TokenMstList().FirstOrDefaultAsync(x => x.Token == tokenReqDTO.Token.Trim() && x.RefreshToken == tokenReqDTO.RefreshToken.Trim());
                 TokenResDTO tokenResDTO = new TokenResDTO();
 
                 if (tokenDetail != null)
                 {
-                    var userDetail = _commonRepo.EmployeeMstList().FirstOrDefault(x => x.EmployeeId == tokenDetail.EmployeeId);
+                    var userDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == tokenDetail.EmployeeId);
                     if (userDetail != null)
                     {
                         string Token = tokenReqDTO.Token.Trim();

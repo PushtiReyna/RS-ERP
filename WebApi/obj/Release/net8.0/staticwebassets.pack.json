@@ -1,0 +1,37 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\book1.jfif",
+      "PackagePath": "staticwebassets\\Images\\book1.jfif"
+    },
+    {
+      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\book2.jfif",
+      "PackagePath": "staticwebassets\\Images\\book2.jfif"
+    },
+    {
+      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\demo.jpg",
+      "PackagePath": "staticwebassets\\Images\\demo.jpg"
+    },
+    {
+      "Id": "D:\\project\\RS-ERP_Main\\RS-ERP\\WebApi\\wwwroot\\Images\\icon.ico",
+      "PackagePath": "staticwebassets\\Images\\icon.ico"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.WebApi.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.build.WebApi.props",
+      "PackagePath": "build\\WebApi.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.WebApi.props",
+      "PackagePath": "buildMultiTargeting\\WebApi.props"
+    },
+    {
+      "Id": "obj\\Release\\net8.0\\staticwebassets\\msbuild.buildTransitive.WebApi.props",
+      "PackagePath": "buildTransitive\\WebApi.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

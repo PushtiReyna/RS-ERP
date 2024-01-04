@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\project\IIS Publish\RS-ERP</_PublishTargetUrl>
+    <History>False|2024-01-04T11:51:54.6450203Z;False|2024-01-04T17:17:35.7621217+05:30;False|2024-01-04T17:13:38.9869912+05:30;False|2024-01-04T17:12:21.6382584+05:30;False|2024-01-04T17:11:27.2309634+05:30;False|2024-01-04T17:07:47.2411438+05:30;True|2024-01-04T17:06:22.1992806+05:30;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

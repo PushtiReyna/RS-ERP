@@ -51,10 +51,18 @@ namespace BusinessLayer
                                         EmployeeStatus = employeeDetail.EmployeeStatus,
                                         JoiningDate = employeeDetail.JoiningDate,
                                         Image = employeeDetail.Image,
-                                        FullName = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName
+                                        Name = employeeDetail.FirstName + " " + employeeDetail.MiddleName + " " + employeeDetail.LastName
                                     }).ToList()/*.Adapt<List<GetUserResDTO>>()*/;
 
-                getEmployeeResDTO.TotalCount = lstEmployeeeList.Count;
+                if (getEmployeeReqDTO.SearchString != null && !string.IsNullOrWhiteSpace(getEmployeeReqDTO.SearchString.Trim()))
+                {
+                    lstEmployeeeList = lstEmployeeeList.Where(x => x.Name.ToLower().Contains(getEmployeeReqDTO.SearchString.ToLower())).ToList();
+                    getEmployeeResDTO.TotalCount = lstEmployeeeList.Count;
+                }
+                else
+                {
+                    getEmployeeResDTO.TotalCount = lstEmployeeeList.Count;
+                }
 
                 if(getEmployeeReqDTO.OrderBy == true)
                 {
@@ -214,9 +222,9 @@ namespace BusinessLayer
                 EmployeeMst employeeMst = new EmployeeMst();
                 AddEmployeePersonalInformationResDTO addEmployeePersonalInformationResDTO = new AddEmployeePersonalInformationResDTO();
 
-                var employeeDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == addEmployeePersonalInformationReqDTO.EmployeeId || x.Email == addEmployeePersonalInformationReqDTO.Email);
+                bool isExist = await _commonRepo.EmployeeMstList().AnyAsync(x => x.EmployeeId == addEmployeePersonalInformationReqDTO.EmployeeId || x.Email == addEmployeePersonalInformationReqDTO.Email);
 
-                if (employeeDetail == null)
+                if (isExist == false)
                 {
                     if (_dbContext.EmployeeMsts.FirstOrDefault(x => x.EmployeeId == addEmployeePersonalInformationReqDTO.EmployeeId && (x.IsDelete == true || x.IsActive == true)) == null)
                     {
@@ -469,8 +477,8 @@ namespace BusinessLayer
                     _dbContext.Entry(employeeDetail).State = EntityState.Modified;
                     _dbContext.SaveChanges();
 
-                    updateEmployeeJobInformationReqDTO.EmployeeId = employeeDetail.EmployeeId;
-                    response.Data = updateEmployeeJobInformationReqDTO;
+                    updateEmployeeJobInformationResDTO.EmployeeId = employeeDetail.EmployeeId;
+                    response.Data = updateEmployeeJobInformationResDTO;
                     response.Message = "Employee Job information updated successfully";
                     response.Status = true;
                     response.StatusCode = System.Net.HttpStatusCode.OK;
@@ -576,13 +584,12 @@ namespace BusinessLayer
             {
                 ResignMst resignMst = new ResignMst();
                 ResignResDTO resignResDTO = new ResignResDTO();
-                var employeeDetail = await _commonRepo.EmployeeMstList().FirstOrDefaultAsync(x => x.EmployeeId == resignReqDTO.EmployeeId);
-                if (employeeDetail != null)
+                bool employeeIsExist = await _commonRepo.EmployeeMstList().AnyAsync(x => x.EmployeeId == resignReqDTO.EmployeeId);
+                if (employeeIsExist == true)
                 {
-                    var EmployeeIdExists = _commonRepo.ResignMstsList().FirstOrDefault(x => x.EmployeeId == resignReqDTO.EmployeeId);
-                    if (EmployeeIdExists == null)
+                    bool employeeIdExists = await _commonRepo.ResignMstsList().AnyAsync(x => x.EmployeeId == resignReqDTO.EmployeeId);
+                    if (employeeIdExists == false)
                     {
-
                         resignMst.EmployeeId = resignReqDTO.EmployeeId;
                         resignMst.DateOfResignation = resignReqDTO.DateOfResignation;
                         resignMst.AttritionId = resignReqDTO.AttritionId;
@@ -615,7 +622,6 @@ namespace BusinessLayer
                     response.Message = "User not exists";
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 }
-
             }
             catch { throw; }
             return response;

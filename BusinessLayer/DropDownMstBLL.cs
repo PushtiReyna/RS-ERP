@@ -35,10 +35,11 @@ namespace BusinessLayer
                 EmployeeTypeResDTO employeeTypeResDTO = new EmployeeTypeResDTO();
 
                 //var employeeTypeDetail = _dbContext.EmployeeTypeMsts.FirstOrDefault(x => x.EmployeeType.Trim() == employeeTypeReqDTO.EmployeeType.Trim());
-                var employeeTypeDetail = await _commonRepo.EmployeeTypeMstList().FirstOrDefaultAsync(x => x.EmployeeType.Trim() == employeeTypeReqDTO.EmployeeType.Trim());
-                if (!string.IsNullOrWhiteSpace(employeeTypeReqDTO.EmployeeType))
+                bool isExist = await _commonRepo.EmployeeTypeMstList().AnyAsync(x => x.EmployeeType.Trim().ToLower() == employeeTypeReqDTO.EmployeeType.Trim().ToLower());
+
+                if (employeeTypeReqDTO.EmployeeType.Trim() != null && !string.IsNullOrWhiteSpace(employeeTypeReqDTO.EmployeeType.Trim()))
                 {
-                    if (employeeTypeDetail == null)
+                    if (isExist == false)
                     {
                         employeeTypeMst.EmployeeType = employeeTypeReqDTO.EmployeeType.Trim();
                         employeeTypeMst.CreatedDate = _commonHelper.GetCurrentDateTime();
@@ -81,10 +82,11 @@ namespace BusinessLayer
                 DesignationResDTO designationResDTO = new DesignationResDTO();
 
                 // var designationDetail = _dbContext.DesignationMsts.FirstOrDefault(x => x.DesignationName.Trim() == designationReqDTO.DesignationName.Trim());
-                var designationDetail = await _commonRepo.DesignationMstList().FirstOrDefaultAsync(x => x.DesignationName.Trim() == designationReqDTO.DesignationName.Trim());
-                if (!string.IsNullOrWhiteSpace(designationReqDTO.DesignationName))
+
+                bool isExist = await _commonRepo.DesignationMstList().AnyAsync(x => x.DesignationName.Trim().ToLower() == designationReqDTO.DesignationName.Trim().ToLower());
+                if (designationReqDTO.DesignationName.Trim() != null && !string.IsNullOrWhiteSpace(designationReqDTO.DesignationName.Trim()))
                 {
-                    if (designationDetail == null)
+                    if (isExist == false)
                     {
                         designationMst.DesignationName = designationReqDTO.DesignationName.Trim();
                         designationMst.CreatedDate = _commonHelper.GetCurrentDateTime();
@@ -126,11 +128,11 @@ namespace BusinessLayer
                 DepartmentMst departmentMst = new DepartmentMst();
                 DepartmentResDTO departmentResDTO = new DepartmentResDTO();
 
-                var departmentDetail = await _commonRepo.DepartmentMstList().FirstOrDefaultAsync(x => x.DepartmentName.Trim() == departmentReqDTO.DepartmentName.Trim());
+                bool isExist = await _commonRepo.DepartmentMstList().AnyAsync(x => x.DepartmentName.Trim().ToLower() == departmentReqDTO.DepartmentName.Trim().ToLower());
 
-                if (!string.IsNullOrWhiteSpace(departmentReqDTO.DepartmentName))
+                if (departmentReqDTO.DepartmentName.Trim() != null && !string.IsNullOrWhiteSpace(departmentReqDTO.DepartmentName.Trim()))
                 {
-                    if (departmentDetail == null)
+                    if (isExist == false)
                     {
                         departmentMst.DepartmentName = departmentReqDTO.DepartmentName.Trim();
                         departmentMst.CreatedDate = _commonHelper.GetCurrentDateTime();
@@ -172,11 +174,11 @@ namespace BusinessLayer
                 RoleMst roleMst = new RoleMst();
                 RoleResDTO roleResDTO = new RoleResDTO();
 
-                var roleDetail = await _commonRepo.RoleMstList().FirstOrDefaultAsync(x => x.RoleType.Trim() == roleReqDTO.RoleType.Trim());
+                bool isExist = await _commonRepo.RoleMstList().AnyAsync(x => x.RoleType.Trim().ToLower() == roleReqDTO.RoleType.Trim().ToLower());
 
-                if (!string.IsNullOrWhiteSpace(roleReqDTO.RoleType))
+                if (roleReqDTO.RoleType.Trim() != null && !string.IsNullOrWhiteSpace(roleReqDTO.RoleType.Trim()))
                 {
-                    if (roleDetail == null)
+                    if (isExist == false)
                     {
                         roleMst.RoleType = roleReqDTO.RoleType.Trim();
                         roleMst.CreatedDate = _commonHelper.GetCurrentDateTime(); 
@@ -218,11 +220,11 @@ namespace BusinessLayer
                 ReportingManagerMst reportingManager = new ReportingManagerMst();
                 ReportingManagerResDTO reportingManagerResDTO = new ReportingManagerResDTO();
 
-                var reportingManagerDetail = await _commonRepo.ReportingManagerMstsList().FirstOrDefaultAsync(x => x.ReportingManagerName.Trim() == reportingManagerReqDTO.ReportingManagerName.Trim());
+                bool isExist = await _commonRepo.ReportingManagerMstsList().AnyAsync(x => x.ReportingManagerName.Trim().ToLower() == reportingManagerReqDTO.ReportingManagerName.Trim().ToLower());
 
-                if (!string.IsNullOrWhiteSpace(reportingManagerReqDTO.ReportingManagerName))
+                if (reportingManagerReqDTO.ReportingManagerName.Trim() != null && !string.IsNullOrWhiteSpace(reportingManagerReqDTO.ReportingManagerName.Trim()))
                 {
-                    if (reportingManagerDetail == null)
+                    if (isExist == false)
                     {
                         reportingManager.ReportingManagerName = reportingManagerReqDTO.ReportingManagerName.Trim();
                         reportingManager.CreatedDate = _commonHelper.GetCurrentDateTime();
@@ -264,11 +266,11 @@ namespace BusinessLayer
                 AttritionTypeMst attritionType = new AttritionTypeMst();
                 AttritionTypeResDTO attritionTypeResDTO = new AttritionTypeResDTO();
 
-                var attritionDetail = await _commonRepo.AttritionTypeMstsList().FirstOrDefaultAsync(x => x.AttritionTypeName.Trim() == attritionTypeReqDTO.AttritionTypeName.Trim());
+                bool isExist = await _commonRepo.AttritionTypeMstsList().AnyAsync(x => x.AttritionTypeName.Trim().ToLower() == attritionTypeReqDTO.AttritionTypeName.Trim().ToLower());
 
-                if (!string.IsNullOrWhiteSpace(attritionTypeReqDTO.AttritionTypeName))
+                if (attritionTypeReqDTO.AttritionTypeName.Trim() != null && !string.IsNullOrWhiteSpace(attritionTypeReqDTO.AttritionTypeName.Trim()))
                 {
-                    if (attritionDetail == null)
+                    if (isExist == false)
                     {
                         attritionType.AttritionTypeName = attritionTypeReqDTO.AttritionTypeName.Trim();
                         attritionType.CreatedDate = _commonHelper.GetCurrentDateTime();
@@ -310,11 +312,11 @@ namespace BusinessLayer
                 LeaveStatusMst leaveStatusMst  = new LeaveStatusMst();
                 LeaveStatusResDTO leaveStatusResDTO  = new LeaveStatusResDTO();
 
-                var leaveStatusDetail = await _commonRepo.LeaveStatusMstsList().FirstOrDefaultAsync(x => x.LeaveStatusName.Trim() == leaveStatusReqDTO.LeaveStatusName.Trim());
+                bool isExist = await _commonRepo.LeaveStatusMstsList().AnyAsync(x => x.LeaveStatusName.Trim().ToLower() == leaveStatusReqDTO.LeaveStatusName.Trim().ToLower());
 
-                if (!string.IsNullOrWhiteSpace(leaveStatusReqDTO.LeaveStatusName))
+                if (leaveStatusReqDTO.LeaveStatusName.Trim() != null && !string.IsNullOrWhiteSpace(leaveStatusReqDTO.LeaveStatusName.Trim()))
                 {
-                    if (leaveStatusDetail == null)
+                    if (isExist == false)
                     {
                         leaveStatusMst.LeaveStatusName = leaveStatusReqDTO.LeaveStatusName.Trim();
                         _dbContext.LeaveStatusMsts.Add(leaveStatusMst);
@@ -351,11 +353,11 @@ namespace BusinessLayer
                 AttendanceTypeMst attendanceTypeMst = new AttendanceTypeMst();
                 AttendanceTypeResDTO attendanceTypeResDTO = new AttendanceTypeResDTO();
 
-                var attendanceTypeDetail = await _commonRepo.AttendanceTypeMstsList().FirstOrDefaultAsync(x => x.AttendanceTypeName.Trim() == attendanceTypeReqDTO.AttendanceTypeName.Trim());
+                bool isExist = await _commonRepo.AttendanceTypeMstsList().AnyAsync(x => x.AttendanceTypeName.Trim().ToLower() == attendanceTypeReqDTO.AttendanceTypeName.Trim().ToLower());
 
-                if (!string.IsNullOrWhiteSpace(attendanceTypeReqDTO.AttendanceTypeName))
+                if (attendanceTypeReqDTO.AttendanceTypeName.Trim() != null && !string.IsNullOrWhiteSpace(attendanceTypeReqDTO.AttendanceTypeName.Trim()))
                 {
-                    if (attendanceTypeDetail == null)
+                    if (isExist == false)
                     {
                         attendanceTypeMst.AttendanceTypeName = attendanceTypeReqDTO.AttendanceTypeName.Trim();
                         _dbContext.AttendanceTypeMsts.Add(attendanceTypeMst);
